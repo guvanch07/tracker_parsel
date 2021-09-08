@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'adding_screen.dart';
 import 'auth/registration.dart';
 import 'onboarding.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RegistScreen(),
+      home: TabScreen(),
     );
   }
 }
