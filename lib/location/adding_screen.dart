@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'dart:async';
 
+import 'package:provider/provider.dart';
+import 'package:tracker_pkg/parsel/parsel.dart';
 import 'package:tracker_pkg/widget/button.dart';
+
+import '../logic/barcode.dart';
+import 'following.dart';
 
 class AddNumber extends StatefulWidget {
   const AddNumber({Key? key}) : super(key: key);
@@ -16,8 +19,6 @@ class AddNumber extends StatefulWidget {
 }
 
 class _AddNumberState extends State<AddNumber> {
-  String _scanBarcode = 'Unknown';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,78 +34,71 @@ class _AddNumberState extends State<AddNumber> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
-              Icons.notification_important,
-              color: Color(0xff666E6D),
-            ),
+            icon: Icon(Icons.notifications, color: Color(0xff666E6D), size: 27),
           ),
         ],
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color(0xff666E6D),
-          ),
+          icon: Icon(Icons.arrow_back_ios, color: Color(0xff666E6D), size: 27),
           onPressed: () {},
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-            ),
-            Center(
-              child: GestureDetector(
-                onTap: () => scanQrcode(),
-                child: Container(
-                  width: 270,
-                  height: 250,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white),
-                  child: SvgPicture.asset('assets/barcode.svg'),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 100,
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<LogicBarCode>().scanQrcode();
+                  },
+                  child: Container(
+                    width: 270,
+                    height: 250,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white),
+                    child: SvgPicture.asset('assets/barcode.svg'),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            textfield(),
-            SizedBox(
-              height: 20,
-            ),
-            PrimaryButton(
-                borderradius: 100, onPressed: () {}, text: '+   Добавить')
-          ],
+              SizedBox(
+                height: 35,
+              ),
+              textfield(),
+              SizedBox(
+                height: 40,
+              ),
+              PrimaryButton(
+                  borderradius: 100,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Following()),
+                    );
+                  },
+                  text: '+   Добавить')
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Future<void> scanQrcode() async {
-    try {
-      final qrCode = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Отмена', true, ScanMode.BARCODE);
-      if (!mounted) return;
-      setState(() {
-        this._scanBarcode = qrCode;
-      });
-    } on PlatformException {
-      _scanBarcode = '';
-    }
   }
 
   Widget textfield() {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(50)),
+          color: Colors.white, borderRadius: BorderRadius.circular(45)),
       margin: EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
         decoration: InputDecoration(
-          hintText: '         Введите номер посылки',
+          hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 14),
+          hintText: '  ${context.watch<LogicBarCode>().scanValue}',
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
           ),
@@ -160,11 +154,27 @@ class _TabScreenState extends State<TabScreen>
                 borderSide: BorderSide(width: 0, color: Colors.transparent),
               ),
               tabs: [
-                SvgPicture.asset('assets/first.svg'),
-                Icon(Icons.ac_unit),
-                SvgPicture.asset('assets/person.svg'),
+                // SvgPicture.asset(
+                //   'assets/first.svg',
+                // ),
+                Icon(
+                  Icons.folder_shared,
+                  size: 50,
+                ),
+
+                Icon(
+                  Icons.add_location_alt_rounded,
+                  size: 50,
+                ),
+                // SvgPicture.asset(
+                //   'assets/person.svg',
+                // ),
+                Icon(
+                  Icons.person,
+                  size: 50,
+                ),
               ],
-              labelColor: Colors.black,
+              labelColor: Color(0xffF57300),
               unselectedLabelColor: Color(0xFF9FABBF),
               indicatorPadding: EdgeInsets.all(2),
               controller: _tabController,
@@ -175,7 +185,7 @@ class _TabScreenState extends State<TabScreen>
       body: SafeArea(
         child: TabBarView(
           controller: _tabController,
-          children: [AddNumber(), AddNumber(), AddNumber()],
+          children: [ParselScreen(), AddNumber(), AddNumber()],
         ),
       ),
     );

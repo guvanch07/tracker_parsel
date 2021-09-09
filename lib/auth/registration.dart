@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tracker_pkg/adding_screen.dart';
+import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:sizer/sizer.dart';
 
