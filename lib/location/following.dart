@@ -4,6 +4,7 @@ import 'package:tracker_pkg/logic/barcode.dart';
 import 'package:tracker_pkg/location/track_follow.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Following extends StatelessWidget {
   @override
@@ -48,28 +49,28 @@ class Following extends StatelessWidget {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(
-                  left: 25,
-                  right: 25,
-                  top: 15,
-                  bottom: 25,
+                  left: 25.w,
+                  right: 25.w,
+                  top: 16.h,
+                  bottom: 23.h,
                 ),
-                height: 44,
+                height: 44.h,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(80)),
                 child: Center(
                   child: Text(
                     '${context.watch<LogicBarCode>().scanValue}',
-                    style: TextStyle(fontSize: 22, color: ktextColor),
+                    style: TextStyle(fontSize: 22.sp, color: ktextColor),
                   ),
                 ),
               ),
               Text(
                 'Наушники',
-                style: TextStyle(fontSize: 25, color: ktextColor),
+                style: TextStyle(fontSize: 25.sp, color: ktextColor),
               ),
               SizedBox(
-                height: 20,
+                height: 22.h,
               ),
               FollowContainer(
                 maintext: 'Доставлено',

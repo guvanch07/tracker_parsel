@@ -5,6 +5,8 @@ import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/parsel/parsel_widget.dart';
 import 'package:tracker_pkg/widget/button.dart';
+import 'package:tracker_pkg/widget/dropdown.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParselScreen extends StatelessWidget {
   const ParselScreen({Key? key}) : super(key: key);
@@ -49,6 +51,13 @@ class ParselScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 11.h,
+              ),
+              DropButton(),
+              SizedBox(
+                height: 17.h,
+              ),
               ParselWidget(
                 text: 'Наушники',
                 time: '19.08',
@@ -61,18 +70,6 @@ class ParselScreen extends StatelessWidget {
                 upgrade: '15:40',
                 where: 'Доставлено',
               ),
-              PrimaryButton(
-                  borderradius: 9.0,
-                  onPressed: () async {
-                    await authService.singOut();
-                  },
-                  text: 'Вход'),
-              PrimaryButton(
-                  borderradius: 9.0,
-                  onPressed: () {
-                    provider.logout();
-                  },
-                  text: 'Вход'),
             ],
           ),
         ));

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tracker_pkg/parsel/parsel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../logic/barcode.dart';
 import 'following.dart';
@@ -49,7 +50,7 @@ class _AddNumberState extends State<AddNumber> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 100,
+                height: 114.h,
               ),
               Center(
                 child: GestureDetector(
@@ -57,8 +58,8 @@ class _AddNumberState extends State<AddNumber> {
                     context.read<LogicBarCode>().scanQrcode();
                   },
                   child: Container(
-                    width: 270,
-                    height: 250,
+                    width: 281.w,
+                    height: 323.h,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.white),
@@ -67,14 +68,12 @@ class _AddNumberState extends State<AddNumber> {
                 ),
               ),
               SizedBox(
-                height: 35,
+                height: 54.h,
               ),
               textfield(),
-              SizedBox(
-                height: 40,
-              ),
+              SizedBox(height: 54.h),
               PrimaryButton(
-                  borderradius: 100,
+                  borderradius: 30.r,
                   onPressed: () {
                     Navigator.push(
                       context,

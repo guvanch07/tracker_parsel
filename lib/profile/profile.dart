@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/textfield.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -49,20 +50,20 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: 160,
+                  height: 164.h,
                 ),
                 MySwitch(),
                 SizedBox(
-                  height: 30,
+                  height: 32.h,
                 ),
                 TextFields(obscuretext: false, text: 'Email'),
                 TextFields(obscuretext: true, text: 'Пароль'),
                 SizedBox(
-                  height: 80,
+                  height: 92.h,
                 ),
                 PrimaryButton(
-                    width: 140,
-                    borderradius: 30,
+                    width: 140.w,
+                    borderradius: 30.r,
                     onPressed: () {},
                     text: 'Изменить')
               ],
@@ -75,7 +76,8 @@ class ProfileScreen extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Container(
-        height: 250,
+        height: 290.h,
+        width: 344.w,
         child: Column(
           children: [
             Align(
@@ -86,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
                 },
                 icon: Icon(
                   Icons.close,
-                  size: 30,
+                  size: 30.sp,
                 ),
               ),
             ),
@@ -94,56 +96,59 @@ class ProfileScreen extends StatelessWidget {
               'Почему с нами выгодно:',
               style: TextStyle(
                   color: ktextColor,
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   decoration: TextDecoration.underline),
             ),
             SizedBox(
-              height: 25,
+              height: 30.h,
             ),
             Row(
               children: [
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: EdgeInsets.only(left: 37.w, right: 22.w),
                     child: SvgPicture.asset('assets/3.svg')),
                 Container(
-                  width: 200,
+                  alignment: Alignment.centerLeft,
+                  width: 200.w,
                   child: Text(
                     'Бесплатно до 01.01. 2022',
-                    style: TextStyle(color: ktextColor, fontSize: 16),
+                    style: TextStyle(color: ktextColor, fontSize: 16.sp),
                   ),
                 )
               ],
             ),
             SizedBox(
-              height: 15,
+              height: 18.h,
             ),
             Row(
               children: [
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: EdgeInsets.only(left: 37.w, right: 22.w),
                     child: SvgPicture.asset('assets/2.svg')),
                 Container(
-                  width: 230,
+                  alignment: Alignment.centerLeft,
+                  width: 230.w,
                   child: Text(
                     'Отслеживаем в максимальном количестве систем',
-                    style: TextStyle(color: ktextColor, fontSize: 16),
+                    style: TextStyle(color: ktextColor, fontSize: 16.sp),
                   ),
                 )
               ],
             ),
             SizedBox(
-              height: 15,
+              height: 18.h,
             ),
             Row(
               children: [
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(left: 37.w, right: 22.w),
                     child: SvgPicture.asset('assets/1.svg')),
                 Container(
-                  width: 200,
+                  width: 200.w,
                   child: Text(
                     'Мультиязычность',
-                    style: TextStyle(color: ktextColor, fontSize: 16),
+                    style: TextStyle(color: ktextColor, fontSize: 16.sp),
                   ),
                 ),
               ],
