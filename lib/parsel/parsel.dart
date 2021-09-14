@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tracker_pkg/auth/auth_service.dart';
+import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/parsel/parsel_widget.dart';
+import 'package:tracker_pkg/widget/button.dart';
 
 class ParselScreen extends StatelessWidget {
   const ParselScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final provider = Provider.of<GoogleSingInPro>(context, listen: false);
     return Scaffold(
         backgroundColor: kbgc,
         appBar: AppBar(
@@ -55,6 +61,18 @@ class ParselScreen extends StatelessWidget {
                 upgrade: '15:40',
                 where: 'Доставлено',
               ),
+              PrimaryButton(
+                  borderradius: 9.0,
+                  onPressed: () async {
+                    await authService.singOut();
+                  },
+                  text: 'Вход'),
+              PrimaryButton(
+                  borderradius: 9.0,
+                  onPressed: () {
+                    provider.logout();
+                  },
+                  text: 'Вход'),
             ],
           ),
         ));

@@ -1,33 +1,79 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:tracker_pkg/auth/auth_service.dart';
 
+import 'auth/auth_google.dart';
+import 'auth/authgoogle.dart';
+import 'auth/wrapper.dart';
 import 'location/adding_screen.dart';
 import 'auth/registration.dart';
 import 'logic/barcode.dart';
 import 'onboarding.dart';
 
-void main() {
+// const AndroidNotificationChannel channel = AndroidNotificationChannel(
+//   'high_importance_channel',
+//   'High Importance Notifications',
+//   'This channnel is used for important notifications',
+//   importance: Importance.high,
+//   playSound: true,
+// );
+
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   print('a bg massage just showed up : ${message.messageId}');
+// }
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
+
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<LogicBarCode>(create: (_) => LogicBarCode())
-      ],
-      child: MyApp(),
-    ),
+    MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<GoogleSingInPro>(
+            create: (_) => GoogleSingInPro()),
+        ChangeNotifierProvider<LogicBarCode>(create: (_) => LogicBarCode()),
+        Provider<AuthService>(
+          create: (_) => AuthService(),
+        )
+      ],
+      child: ScreenUtilInit(
+        builder: () => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: Wrapper(),
+        ),
+        designSize: const Size(414, 896),
       ),
-      home: TabScreen(),
     );
   }
 }

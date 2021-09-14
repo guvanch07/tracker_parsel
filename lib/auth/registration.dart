@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/widget/button.dart';
-import 'package:sizer/sizer.dart';
+
+import 'package:tracker_pkg/widget/textfield.dart';
+
+import 'auth_service.dart';
+import 'login.dart';
 
 class RegistScreen extends StatelessWidget {
   const RegistScreen({Key? key}) : super(key: key);
@@ -10,6 +15,9 @@ class RegistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final size = MediaQuery.of(context).size;
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final authService = Provider.of<AuthService>(context);
     return Scaffold(
         body: SafeArea(
       top: false,
@@ -33,41 +41,31 @@ class RegistScreen extends StatelessWidget {
                           fontFamily: 'Roboto'),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 58),
-                    child: TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(height: 0),
-                        labelText: 'Email',
-                      ),
-                    ),
+                  TextFields(
+                    obscuretext: false,
+                    text: 'Email',
+                    controller: emailController,
                   ),
                   SizedBox(height: 15),
+                  TextFields(
+                    obscuretext: true,
+                    text: 'Пароль',
+                    controller: passwordController,
+                  ),
+                  SizedBox(
+                    height: 13,
+                  ),
                   Container(
+                    alignment: Alignment.centerRight,
                     margin: EdgeInsets.symmetric(horizontal: 58),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(height: 0),
-                            labelText: 'Пароль',
-                          ),
+                    child: InkWell(
+                      child: Text(
+                        'Забыли пароль?',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Color(0xffAFAFAF),
                         ),
-                        SizedBox(
-                          height: 13,
-                        ),
-                        InkWell(
-                            child: Text(
-                          'Забыли пароль?',
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Color(0xffAFAFAF),
-                          ),
-                        )),
-                      ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -101,11 +99,10 @@ class RegistScreen extends StatelessWidget {
                   ),
                   PrimaryButton(
                       borderradius: 9.0,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddNumber()),
-                        );
+                      onPressed: () async {
+                        await authService.createUserWithEmailAndPassword(
+                            emailController.text, passwordController.text);
+                        Navigator.pop(context);
                       },
                       text: 'Регистрация'),
                   SizedBox(
@@ -115,7 +112,15 @@ class RegistScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       divider(),
-                      InkWell(onTap: () {}, child: Text('или вход')),
+                      InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
+                            );
+                          },
+                          child: Text('или вход')),
                       divider(),
                     ],
                   )

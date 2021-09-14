@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tracker_pkg/const/color.dart';
-import 'package:sizer/sizer.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/parsel/parsel.dart';
+import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
 
 import '../logic/barcode.dart';
@@ -185,7 +185,7 @@ class _TabScreenState extends State<TabScreen>
       body: SafeArea(
         child: TabBarView(
           controller: _tabController,
-          children: [ParselScreen(), AddNumber(), AddNumber()],
+          children: [ParselScreen(), AddNumber(), ProfileScreen()],
         ),
       ),
     );
