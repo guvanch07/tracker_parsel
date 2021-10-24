@@ -7,6 +7,7 @@ import 'package:tracker_pkg/parsel/parsel_widget.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/dropdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tracker_pkg/widget/showdialog.dart';
 
 class ParselScreen extends StatelessWidget {
   const ParselScreen({Key? key}) : super(key: key);
@@ -30,7 +31,9 @@ class ParselScreen extends StatelessWidget {
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(context: context, builder: (_) => ShowDialog());
+              },
               icon: Icon(
                 Icons.notifications,
                 color: Color(0xff666E6D),
@@ -70,6 +73,12 @@ class ParselScreen extends StatelessWidget {
                 upgrade: '15:40',
                 where: 'Доставлено',
               ),
+              // PrimaryButton(
+              //     borderradius: 30.r,
+              //     onPressed: () {
+              //       authService.singOut();
+              //     },
+              //     text: '+   Добавить')
             ],
           ),
         ));

@@ -5,6 +5,7 @@ import 'package:tracker_pkg/location/track_follow.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tracker_pkg/widget/showdialog.dart';
 
 class Following extends StatelessWidget {
   @override
@@ -24,7 +25,9 @@ class Following extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(context: context, builder: (_) => ShowDialog());
+            },
             icon: Icon(
               Icons.notifications,
               color: Color(0xff666E6D),

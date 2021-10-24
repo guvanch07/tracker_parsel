@@ -105,11 +105,11 @@ class ProfileScreen extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    margin: EdgeInsets.only(left: 37.w, right: 22.w),
+                    margin: EdgeInsets.only(left: 30.w, right: 22.w),
                     child: SvgPicture.asset('assets/3.svg')),
                 Container(
                   alignment: Alignment.centerLeft,
-                  width: 200.w,
+                  width: 230.w,
                   child: Text(
                     'Бесплатно до 01.01. 2022',
                     style: TextStyle(color: ktextColor, fontSize: 16.sp),
@@ -123,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    margin: EdgeInsets.only(left: 37.w, right: 22.w),
+                    margin: EdgeInsets.only(left: 30.w, right: 22.w),
                     child: SvgPicture.asset('assets/2.svg')),
                 Container(
                   alignment: Alignment.centerLeft,
@@ -141,11 +141,11 @@ class ProfileScreen extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.only(left: 37.w, right: 22.w),
+                    margin: EdgeInsets.only(left: 30.w, right: 22.w),
                     child: SvgPicture.asset('assets/1.svg')),
                 Container(
-                  width: 200.w,
+                  alignment: Alignment.centerLeft,
+                  width: 230.w,
                   child: Text(
                     'Мультиязычность',
                     style: TextStyle(color: ktextColor, fontSize: 16.sp),

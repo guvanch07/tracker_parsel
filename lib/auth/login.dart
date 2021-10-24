@@ -22,11 +22,11 @@ class LoginScreen extends StatelessWidget {
     final provider = Provider.of<GoogleSingInPro>(context, listen: false);
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshop) {
+      builder: (context, snapshot) {
         //final provider = Provider.of<GoogleSingInPro>(context);
         if (provider.isSingingIn) {
           return buildLoading();
-        } else if (snapshop.hasData) {
+        } else if (snapshot.hasData) {
           return TabScreen();
         } else {
           return Scaffold(

@@ -8,6 +8,7 @@ import 'package:tracker_pkg/parsel/parsel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tracker_pkg/widget/showdialog.dart';
 
 import '../logic/barcode.dart';
 import 'following.dart';
@@ -34,7 +35,9 @@ class _AddNumberState extends State<AddNumber> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(context: context, builder: (_) => ShowDialog());
+            },
             icon: Icon(Icons.notifications, color: Color(0xff666E6D), size: 27),
           ),
         ],
@@ -59,7 +62,7 @@ class _AddNumberState extends State<AddNumber> {
                   },
                   child: Container(
                     width: 281.w,
-                    height: 323.h,
+                    height: 300.h,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.white),
@@ -80,7 +83,7 @@ class _AddNumberState extends State<AddNumber> {
                       MaterialPageRoute(builder: (context) => Following()),
                     );
                   },
-                  text: '+   Добавить')
+                  text: '+   Добавить'),
             ],
           ),
         ),
