@@ -41,7 +41,10 @@ class ProfileScreen extends StatelessWidget {
               color: Color(0xff666E6D),
               size: 27,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              print('Pop Profile');
+            },
+            //() => Navigator.pop(context),
           ),
           backgroundColor: Colors.transparent,
         ),
@@ -56,16 +59,16 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: 32.h,
                 ),
-                TextFields(obscuretext: false, text: 'Email'),
-                TextFields(obscuretext: true, text: 'Пароль'),
-                SizedBox(
-                  height: 92.h,
-                ),
-                PrimaryButton(
-                    width: 140.w,
-                    borderradius: 30.r,
-                    onPressed: () {},
-                    text: 'Изменить')
+                // TextFields(obscuretext: false, text: 'Email'),
+                // TextFields(obscuretext: true, text: 'Пароль'),
+                // SizedBox(
+                //   height: 92.h,
+                // ),
+                // PrimaryButton(
+                //     width: 140.w,
+                //     borderradius: 30.r,
+                //     onPressed: () {},
+                //     text: 'Изменить')
               ],
             ),
           ),

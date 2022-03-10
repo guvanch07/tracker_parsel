@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: Wrapper(),
+          home: TabScreen(),
         ),
         designSize: const Size(414, 896),
       ),

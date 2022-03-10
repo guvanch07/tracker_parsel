@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,7 +41,9 @@ class _AddNumberState extends State<AddNumber> {
         ],
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xff666E6D), size: 27),
-          onPressed: () {},
+          onPressed: () {
+            print('Pop Adding');
+          },
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -58,12 +61,12 @@ class _AddNumberState extends State<AddNumber> {
                     context.read<LogicBarCode>().scanQrcode();
                   },
                   child: Container(
-                    width: 281.w,
-                    height: 323.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white),
-                    child: SvgPicture.asset('assets/barcode.svg'),
+                    width: 323.w,
+                    height: 281.h,
+                    // decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(12),
+                    //     color: Colors.white),
+                    child: Image.asset('assets/Group 64.png'),
                   ),
                 ),
               ),
