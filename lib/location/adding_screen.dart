@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tracker_pkg/const/color.dart';
 
 import 'package:provider/provider.dart';
+import 'package:tracker_pkg/const/styless.dart';
 import 'package:tracker_pkg/parsel/parsel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
@@ -27,20 +31,17 @@ class _AddNumberState extends State<AddNumber> {
       backgroundColor: kbgc,
       appBar: AppBar(
         elevation: 0,
-        title: Text(
-          'Добавление',
-          style: TextStyle(
-              color: Color(0xff666E6D), fontSize: 24, fontFamily: 'Roboto'),
-        ),
+        title: Text('Добавление', style: kTextAppBar),
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications, color: Color(0xff666E6D), size: 27),
+            onPressed: () =>
+                showDialog(context: context, builder: (_) => dialog(context)),
+            icon: Icon(Icons.notifications, color: kTextColor, size: 27),
           ),
         ],
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Color(0xff666E6D), size: 27),
+          icon: Icon(Icons.arrow_back_ios, color: kTextColor, size: 27),
           onPressed: () {
             print('Pop Adding');
           },
@@ -63,9 +64,6 @@ class _AddNumberState extends State<AddNumber> {
                   child: Container(
                     width: 323.w,
                     height: 281.h,
-                    // decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(12),
-                    //     color: Colors.white),
                     child: Image.asset('assets/Group 64.png'),
                   ),
                 ),
@@ -98,8 +96,10 @@ class _AddNumberState extends State<AddNumber> {
           color: Colors.white, borderRadius: BorderRadius.circular(45)),
       margin: EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
+        cursorColor: kTextColor,
+        style: kText22,
         decoration: InputDecoration(
-          hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 14),
+          hintStyle: kText14,
           hintText: '  ${context.watch<LogicBarCode>().scanValue}',
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
@@ -120,11 +120,10 @@ class TabScreen extends StatefulWidget {
 class _TabScreenState extends State<TabScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _isselected = false;
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
   }
 
@@ -156,28 +155,43 @@ class _TabScreenState extends State<TabScreen>
                 borderSide: BorderSide(width: 0, color: Colors.transparent),
               ),
               tabs: [
-                // SvgPicture.asset(
-                //   'assets/first.svg',
-                // ),
-                Icon(
-                  Icons.folder_shared,
-                  size: 50,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _tabController.index = 0;
+                    });
+                  },
+                  child: Tab(
+                    icon: SvgPicture.asset(
+                      'assets/one.svg',
+                      color:
+                          _tabController.index == 0 ? kButton : kBottomButton,
+                    ),
+                  ),
                 ),
-
-                Icon(
-                  Icons.add_location_alt_rounded,
-                  size: 50,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _tabController.index = 1;
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    'assets/two.svg',
+                    color: _tabController.index == 1 ? kButton : kBottomButton,
+                  ),
                 ),
-                // SvgPicture.asset(
-                //   'assets/person.svg',
-                // ),
-                Icon(
-                  Icons.person,
-                  size: 50,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _tabController.index = 2;
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    'assets/three.svg',
+                    color: _tabController.index == 2 ? kButton : kBottomButton,
+                  ),
                 ),
               ],
-              labelColor: Color(0xffF57300),
-              unselectedLabelColor: Color(0xFF9FABBF),
               indicatorPadding: EdgeInsets.all(2),
               controller: _tabController,
             ),
@@ -192,4 +206,51 @@ class _TabScreenState extends State<TabScreen>
       ),
     );
   }
+}
+
+Widget dialog(BuildContext context) {
+  return Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+    child: Container(
+      height: 290.h,
+      width: 344.w,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.close,
+                size: 30.sp,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30.h,
+          ),
+          Text(
+            'Если у Вас возникли какие-нибудь\nвопросы, напишите нам на почту',
+            style: kText16,
+            textAlign: TextAlign.center,
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Text('@dgrhrw.',
+                style: kText16.copyWith(
+                    color: kBlue,
+                    decoration: TextDecoration.underline,
+                    decorationColor: kBlue)),
+          ),
+          Text(
+            'Наши разработчики незамедлительно\nсвяжутся с Вами ;)',
+            style: kText16,
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    ),
+  );
 }

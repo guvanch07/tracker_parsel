@@ -61,13 +61,13 @@ class Following extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '${context.watch<LogicBarCode>().scanValue}',
-                    style: TextStyle(fontSize: 22.sp, color: ktextColor),
+                    style: TextStyle(fontSize: 22.sp, color: kTextColor),
                   ),
                 ),
               ),
               Text(
                 'Наушники',
-                style: TextStyle(fontSize: 25.sp, color: ktextColor),
+                style: TextStyle(fontSize: 25.sp, color: kTextColor),
               ),
               SizedBox(
                 height: 22.h,

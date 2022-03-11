@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/const/styless.dart';
 
 class ParselWidget extends StatelessWidget {
   const ParselWidget(
@@ -28,7 +29,7 @@ class ParselWidget extends StatelessWidget {
             child: Text(
               time,
               style: TextStyle(
-                color: ktextColor,
+                color: kTextColor,
                 fontSize: 16,
               ),
             ),
@@ -43,17 +44,11 @@ class ParselWidget extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     text,
-                    style: TextStyle(
-                      color: ktextColor,
-                      fontSize: 16,
-                    ),
+                    style: kText16,
                   ),
                   Text(
                     where,
-                    style: TextStyle(
-                      color: Color(0xffABAFAF),
-                      fontSize: 14,
-                    ),
+                    style: kText14,
                   ),
                 ]),
           ),
@@ -62,20 +57,8 @@ class ParselWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Text(
-                  'Обновлено',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xffABAFAF),
-                  ),
-                ),
-                Text(
-                  upgrade,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xffABAFAF),
-                  ),
-                )
+                Text('Обновлено', style: kText14),
+                Text(upgrade, style: kText14)
               ],
             ),
           )

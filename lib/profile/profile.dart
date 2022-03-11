@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/const/styless.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/textfield.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,14 +16,7 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: kbgc,
         appBar: AppBar(
           elevation: 0,
-          title: Text(
-            'Профиль',
-            style: TextStyle(
-                color: Color(0xff666E6D),
-                fontSize: 24,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.normal),
-          ),
+          title: Text('Профиль', style: kTextAppBar),
           centerTitle: true,
           actions: [
             IconButton(
@@ -30,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
                   showDialog(context: context, builder: (_) => dialog(context)),
               icon: Icon(
                 Icons.star,
-                color: Color(0xff666E6D),
+                color: kTextColor,
                 size: 30,
               ),
             ),
@@ -38,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Color(0xff666E6D),
+              color: kTextColor,
               size: 27,
             ),
             onPressed: () {
@@ -98,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
             Text(
               'Почему с нами выгодно:',
               style: TextStyle(
-                  color: ktextColor,
+                  color: kTextColor,
                   fontSize: 20.sp,
                   decoration: TextDecoration.underline),
             ),
@@ -115,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 200.w,
                   child: Text(
                     'Бесплатно до 01.01. 2022',
-                    style: TextStyle(color: ktextColor, fontSize: 16.sp),
+                    style: TextStyle(color: kTextColor, fontSize: 16.sp),
                   ),
                 )
               ],
@@ -133,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 230.w,
                   child: Text(
                     'Отслеживаем в максимальном количестве систем',
-                    style: TextStyle(color: ktextColor, fontSize: 16.sp),
+                    style: TextStyle(color: kTextColor, fontSize: 16.sp),
                   ),
                 )
               ],
@@ -151,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 200.w,
                   child: Text(
                     'Мультиязычность',
-                    style: TextStyle(color: ktextColor, fontSize: 16.sp),
+                    style: TextStyle(color: kTextColor, fontSize: 16.sp),
                   ),
                 ),
               ],
@@ -181,7 +175,7 @@ class _MySwitchState extends State<MySwitch> {
         children: [
           Text(
             'Включить уведомления',
-            style: TextStyle(fontSize: 16, color: ktextColor),
+            style: kText16,
           ),
           Switch(
             value: _switched,

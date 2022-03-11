@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/parsel/parsel_widget.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/dropdown.dart';
@@ -21,19 +23,16 @@ class ParselScreen extends StatelessWidget {
           elevation: 0,
           title: Text(
             'Посылки',
-            style: TextStyle(
-                color: Color(0xff666E6D),
-                fontSize: 24,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.normal),
+            style: kTextAppBar,
           ),
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () =>
+                  showDialog(context: context, builder: (_) => dialog(context)),
               icon: Icon(
                 Icons.notifications,
-                color: Color(0xff666E6D),
+                color: kTextColor,
                 size: 27,
               ),
             ),
@@ -41,7 +40,7 @@ class ParselScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Color(0xff666E6D),
+              color: kTextColor,
               size: 27,
             ),
             onPressed: () {},

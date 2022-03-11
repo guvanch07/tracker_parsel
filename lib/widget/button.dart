@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracker_pkg/const/styless.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton(
@@ -24,7 +25,7 @@ class PrimaryButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: kText16.copyWith(color: Colors.white),
           ),
         ),
       ),
