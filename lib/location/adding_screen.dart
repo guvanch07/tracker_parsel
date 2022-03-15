@@ -9,6 +9,7 @@ import 'package:tracker_pkg/const/color.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/data/datasources/data_source.dart';
 import 'package:tracker_pkg/parsel/parsel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
@@ -25,6 +26,8 @@ class AddNumber extends StatefulWidget {
 }
 
 class _AddNumberState extends State<AddNumber> {
+  final myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,15 +74,35 @@ class _AddNumberState extends State<AddNumber> {
               SizedBox(
                 height: 54.h,
               ),
-              textfield(),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(45)),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                  controller: myController,
+                  cursorColor: kTextColor,
+                  style: kText22,
+                  decoration: InputDecoration(
+                    hintStyle: kText14,
+                    hintText: '  ${context.watch<LogicBarCode>().scanValue}',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: 54.h),
               PrimaryButton(
                   borderradius: 30.r,
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Following()),
-                    );
+                    registerParcel('11');
+                    // print(myController.text);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => Following()),
+                    // );
                   },
                   text: '+   Добавить')
             ],
@@ -89,25 +112,28 @@ class _AddNumberState extends State<AddNumber> {
     );
   }
 
-  Widget textfield() {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(45)),
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        cursorColor: kTextColor,
-        style: kText22,
-        decoration: InputDecoration(
-          hintStyle: kText14,
-          hintText: '  ${context.watch<LogicBarCode>().scanValue}',
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
+  //
+  // Widget textfield() {
+  //
+  //   return Container(
+  //     height: 50,
+  //     decoration: BoxDecoration(
+  //         color: Colors.white, borderRadius: BorderRadius.circular(45)),
+  //     margin: EdgeInsets.symmetric(horizontal: 20),
+  //     child: TextField(
+  //       controller: myController,
+  //       cursorColor: kTextColor,
+  //       style: kText22,
+  //       decoration: InputDecoration(
+  //         hintStyle: kText14,
+  //         hintText: '  ${context.watch<LogicBarCode>().scanValue}',
+  //         border: OutlineInputBorder(
+  //           borderSide: BorderSide.none,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class TabScreen extends StatefulWidget {
