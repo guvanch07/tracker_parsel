@@ -11,19 +11,19 @@ Future<int> registerParcel(String number) async {
       Uri.parse('https://api.17track.net/track/v1/register'),
       headers: {'17token': '$key', 'Content-Type': 'application/json'},
       body: "[{'number': 'SB071931150LV'}]");
+
+  /// change number
   //print(response.body);
   if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-
+    var data = json.decode(response.body);
     print('data  $data');
     var rest = data['data'];
     print('rest  $rest');
-    list = await rest
-        .map((Map<String, dynamic> json) => Data.fromJson(json))
-        .toList();
+    //return Data.fromJson(data);
+    // lis;
     //
-    print('cool');
-    print(list);
+    //print('cool');
+    //print(list);
     //print("List Size: ${list.length}");
     //print(json.decode(response.body));
   } else {
@@ -35,3 +35,38 @@ Future<int> registerParcel(String number) async {
 }
 
 class ServerException implements Exception {}
+
+@override
+Future<int> infoAboutParcel(String number) async {
+  //List<Data> list;
+  final response = await http.post(
+      Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
+      headers: {'17token': '$key', 'Content-Type': 'application/json'},
+      body: "[{'number': 'SB071931150LV', 'carrier': '12021'}]");
+
+  /// change carrier for number
+  //print(response.body);
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    print('data  $data');
+    var rest = data['data'];
+    print('rest  $rest');
+    //return Data.fromJson(data);
+    // final data = json.decode(response.body);
+    //
+    // print('data  $data');
+    // var rest = data['data'];
+    // print('rest  $rest');
+    // //list = await rest.map((json) => Data.fromJson(json)).toList();
+    // //
+    // print('cool');
+    //print(list);
+    //print("List Size: ${list.length}");
+    //print(json.decode(response.body));
+  } else {
+    print(response.statusCode);
+    print(response.body);
+    throw ServerException();
+  }
+  return 2;
+}

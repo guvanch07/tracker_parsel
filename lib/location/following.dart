@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/logic/barcode.dart';
 import 'package:tracker_pkg/location/track_follow.dart';
 import 'package:tracker_pkg/widget/button.dart';
@@ -24,7 +25,8 @@ class Following extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () =>
+                showDialog(context: context, builder: (_) => dialog(context)),
             icon: Icon(
               Icons.notifications,
               color: Color(0xff666E6D),

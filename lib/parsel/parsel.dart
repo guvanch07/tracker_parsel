@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/auth/authgoogle.dart';
@@ -49,28 +50,31 @@ class ParselScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 11.h,
-              ),
-              DropButton(),
-              SizedBox(
-                height: 17.h,
-              ),
-              ParselWidget(
-                text: 'Наушники',
-                time: '19.08',
-                upgrade: '13:24',
-                where: 'Прошло регистрацию',
-              ),
-              ParselWidget(
-                text: 'Платье',
-                time: '15.08',
-                upgrade: '15:40',
-                where: 'Доставлено',
-              ),
-            ],
+          child: Center(
+            child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 11.h,
+                ),
+                DropButton(),
+                SizedBox(
+                  height: 17.h,
+                ),
+                ParselWidget(
+                  text: 'Наушники',
+                  time: '19.08',
+                  upgrade: '13:24',
+                  where: 'Прошло регистрацию',
+                ),
+                ParselWidget(
+                  text: 'Платье',
+                  time: '15.08',
+                  upgrade: '15:40',
+                  where: 'Доставлено',
+                ),
+              ],
+            ),
           ),
         ));
   }

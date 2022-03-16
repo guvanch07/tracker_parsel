@@ -14,9 +14,20 @@ class DropButton extends StatefulWidget {
   _DropButtonState createState() => _DropButtonState();
 }
 
-String dropdownValue = 'One';
+//String dropdownValue = 'One';
 
 class _DropButtonState extends State<DropButton> {
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("Все посылки"), value: "Все посылки"),
+      DropdownMenuItem(child: Text("Отслеживаются"), value: "Отслеживаются"),
+      DropdownMenuItem(child: Text("Архив"), value: "Архив"),
+      DropdownMenuItem(child: Text("Не найдено"), value: "Не найдено"),
+    ];
+    return menuItems;
+  }
+
+  String selectedValue = "Все посылки";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,82 +38,53 @@ class _DropButtonState extends State<DropButton> {
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
       ),
-      child: DropdownButton<String>(
-        value: dropdownValue,
-        isExpanded: true,
-        //icon: const Icon(Icons.keyboard_arrow_down),
-        // iconSize: 24,
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        onChanged: (String? newValue) {
-          setState(() {
-            dropdownValue = newValue!;
-          });
-        },
-        items: <String>['One', 'Two', 'Free', 'Four']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Container(
-              width: 361.w,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
-              child: Text(value),
+      child: DropdownButtonFormField(
+          decoration: InputDecoration(
+            hintText: 'filtr',
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 2),
+              borderRadius: BorderRadius.circular(20),
             ),
-          );
-        }).toList(),
-      ),
+            // border: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red, width: 2),
+            //   borderRadius: BorderRadius.circular(20),
+            // ),
+            filled: true,
+            fillColor: Colors.white,
+          ),
+          dropdownColor: Colors.white,
+          value: selectedValue,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedValue = newValue!;
+            });
+          },
+          items: dropdownItems),
+      // child: DropdownButton<String>(
+      //   value: dropdownValue,
+      //   isExpanded: true,
+      //   //icon: const Icon(Icons.keyboard_arrow_down),
+      //   // iconSize: 24,
+      //   elevation: 16,
+      //   style: const TextStyle(color: Colors.deepPurple),
+      //   onChanged: (String? newValue) {
+      //     setState(() {
+      //       dropdownValue = newValue!;
+      //     });
+      //   },
+      //   items: <String>['One', 'Two', 'Free', 'Four']
+      //       .map<DropdownMenuItem<String>>((String value) {
+      //     return DropdownMenuItem<String>(
+      //       value: value,
+      //       child: Container(
+      //         width: 361.w,
+      //         decoration:
+      //             BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
+      //         child: Text(value),
+      //       ),
+      //     );
+      //   }).toList(),
+      // ),
     );
   }
 }
-
-// class DropButton extends StatefulWidget {
-//   const DropButton({Key? key}) : super(key: key);
-
-//   @override
-//   _DropButtonState createState() => _DropButtonState();
-// }
-
-// var _chosenValue;
-
-// class _DropButtonState extends State<DropButton> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(0.0),
-//       child: DropdownButton<String>(
-//         value: _chosenValue,
-//         onChanged: (value) {
-//           setState(
-//             () {
-//               _chosenValue = value!;
-//             },
-//           );
-//         },
-//         //elevation: 5,
-//         style: TextStyle(color: Colors.black),
-
-//         items: <String>[
-//           'Android',
-//           'IOS',
-//           'Flutter',
-//           'Node',
-//           'Java',
-//           'Python',
-//           'PHP',
-//         ].map<DropdownMenuItem<String>>((String value) {
-//           return DropdownMenuItem<String>(
-//             // onTap: () {},
-//             // value: value,
-//             child: Text(''),
-//           );
-//         }).toList(),
-//         hint: Text(
-//           "Please choose a langauage",
-//           style: TextStyle(
-//               color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -97,12 +97,13 @@ class _AddNumberState extends State<AddNumber> {
               PrimaryButton(
                   borderradius: 30.r,
                   onPressed: () {
-                    registerParcel('11');
-                    // print(myController.text);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => Following()),
-                    // );
+                    // registerParcel('11');
+                    // infoAboutParcel('11');
+                    print(myController.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Following()),
+                    );
                   },
                   text: '+   Добавить')
             ],
@@ -149,14 +150,19 @@ class _TabScreenState extends State<TabScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
+    _tabController = new TabController(length: 3, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void _handleTabSelection() {
+    setState(() {});
   }
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -176,50 +182,28 @@ class _TabScreenState extends State<TabScreen>
           child: Container(
             height: 80,
             width: double.infinity,
-            child: TabBar(
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 0, color: Colors.transparent),
-              ),
-              tabs: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _tabController.index = 0;
-                    });
-                  },
-                  child: Tab(
+            child: GestureDetector(
+              child: TabBar(
+                indicatorColor: Colors.transparent,
+                tabs: [
+                  Tab(
                     icon: SvgPicture.asset(
                       'assets/one.svg',
                       color:
                           _tabController.index == 0 ? kButton : kBottomButton,
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _tabController.index = 1;
-                    });
-                  },
-                  child: SvgPicture.asset(
+                  SvgPicture.asset(
                     'assets/two.svg',
                     color: _tabController.index == 1 ? kButton : kBottomButton,
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _tabController.index = 2;
-                    });
-                  },
-                  child: SvgPicture.asset(
+                  SvgPicture.asset(
                     'assets/three.svg',
                     color: _tabController.index == 2 ? kButton : kBottomButton,
                   ),
-                ),
-              ],
-              indicatorPadding: EdgeInsets.all(2),
-              controller: _tabController,
+                ],
+                controller: _tabController,
+              ),
             ),
           ),
         ),
