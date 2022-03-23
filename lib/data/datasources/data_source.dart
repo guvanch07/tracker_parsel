@@ -19,6 +19,10 @@ Future<int> registerParcel(String number) async {
     print('data  $data');
     var rest = data['data'];
     print('rest  $rest');
+    // var mart = rest
+    //     .map((key, value) => Data(accepted: value, rejected: value))
+    //     .toList();
+    // print(mart);
     //return Data.fromJson(data);
     // lis;
     //

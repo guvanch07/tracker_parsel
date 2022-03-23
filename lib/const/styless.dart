@@ -27,3 +27,20 @@ const kText14 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: kTextColor55);
+
+const kText10 = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    color: Colors.white);
+const kText18 = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    color: kTextColor);
+
+const kText30 = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 30,
+    fontWeight: FontWeight.w400,
+    color: kTextColor);

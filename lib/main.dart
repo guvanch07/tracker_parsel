@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
+import 'package:tracker_pkg/payment/profile_payment.dart';
 
 import 'auth/auth_google.dart';
 import 'auth/authgoogle.dart';
@@ -70,7 +71,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: TabScreen(),
+          home: PaymentScreen(),
+          //home: TabScreen(),
         ),
         designSize: const Size(414, 896),
       ),
