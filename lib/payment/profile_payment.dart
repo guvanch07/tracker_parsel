@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/const/styless.dart';
 import 'package:tracker_pkg/location/adding_screen.dart';
+import 'package:tracker_pkg/services/payments/purchse_api.dart';
 // import 'package:provider/provider.dart';
 // import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/widget/button.dart';
@@ -12,9 +13,14 @@ import 'package:tracker_pkg/widget/textfield.dart';
 // import 'auth_service.dart';
 // import 'login.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
 
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     var features = [
@@ -131,6 +137,24 @@ class PaymentScreen extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Future fetchOffers() async {
+    final offerings = await PurchaseApi.fetchOffers();
+
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('No Plans Found'),
+      ));
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+    }
+
+    final offer = offerings.first;
+    print('Offer: $offer');
   }
 
   Widget divider() {

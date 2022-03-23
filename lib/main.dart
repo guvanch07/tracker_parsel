@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/payment/profile_payment.dart';
+import 'package:tracker_pkg/services/payments/purchse_api.dart';
 
 import 'auth/auth_google.dart';
 import 'auth/authgoogle.dart';
@@ -34,6 +35,7 @@ import 'onboarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await PurchaseApi.init();
   await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
