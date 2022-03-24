@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:605781586521:android:bbec1743c36175bfea7748",
         "android_client_info": {
-          "package_name": "com.example.tracker_pkg"
+          "package_name": "com.entex.tracker_pkg"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "605781586521-9ukpdufnte6ceq1970hmfig79mr0otmv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.tracker_pkg",
+            "package_name": "com.entex.tracker_pkg",
             "certificate_hash": "bb3e501fe8dac817388ca97d866ff4dfc5976301"
           }
         },

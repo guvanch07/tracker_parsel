@@ -1,16 +1,18 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Data {
-  Accepted accepted;
+  List<Accepted> accepted;
 
   // Rejected rejected;
   Data({required this.accepted});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      accepted: Accepted.fromJson(json["accepted"]),
-      // rejected: Rejected.fromJson(json["rejected"]),
-    );
+        accepted: (json['accepted'] as List)
+            .map((item) => Accepted.fromJson(item))
+            .toList()
+        // rejected: Rejected.fromJson(json["rejected"]),
+        );
   }
 }
 

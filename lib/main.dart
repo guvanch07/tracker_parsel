@@ -35,7 +35,7 @@ import 'onboarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PurchaseApi.init();
+  // await PurchaseApi.init();
   await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
