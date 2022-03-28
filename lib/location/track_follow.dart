@@ -35,7 +35,7 @@ class FollowContainer extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     date ?? '18',
-                    style: TextStyle(color: ktextColor, fontSize: 18),
+                    style: TextStyle(color: kTextColor, fontSize: 18),
                   ),
                   Text(
                     month ?? 'июль',
@@ -55,14 +55,14 @@ class FollowContainer extends StatelessWidget {
                   Container(
                     height: 35,
                     width: 2,
-                    color: ktextColor,
+                    color: kTextColor,
                   ),
               circle ??
                   Container(
                     width: 10,
                     height: 10,
                     decoration: BoxDecoration(
-                      color: ktextColor,
+                      color: kTextColor,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -70,7 +70,7 @@ class FollowContainer extends StatelessWidget {
                   Container(
                     height: 35,
                     width: 2,
-                    color: ktextColor,
+                    color: kTextColor,
                   )
             ],
           ),
@@ -87,11 +87,11 @@ class FollowContainer extends StatelessWidget {
                 Text(
                   maintext,
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: ktextColor, fontSize: 16),
+                  style: TextStyle(color: kTextColor, fontSize: 16),
                 ),
                 Text(
                   locate ?? 'Минск, Беларусь',
-                  style: TextStyle(color: ktextColor, fontSize: 12),
+                  style: TextStyle(color: kTextColor, fontSize: 12),
                 )
               ],
             ),

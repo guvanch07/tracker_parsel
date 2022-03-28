@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/parsel/parsel_widget.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/dropdown.dart';
@@ -21,19 +24,16 @@ class ParselScreen extends StatelessWidget {
           elevation: 0,
           title: Text(
             'Посылки',
-            style: TextStyle(
-                color: Color(0xff666E6D),
-                fontSize: 24,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.normal),
+            style: kTextAppBar,
           ),
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () =>
+                  showDialog(context: context, builder: (_) => dialog(context)),
               icon: Icon(
                 Icons.notifications,
-                color: Color(0xff666E6D),
+                color: kTextColor,
                 size: 27,
               ),
             ),
@@ -41,36 +41,40 @@ class ParselScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Color(0xff666E6D),
+              color: kTextColor,
               size: 27,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {},
+            //=> Navigator.pop(context),
           ),
           backgroundColor: Colors.transparent,
         ),
         body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 11.h,
-              ),
-              DropButton(),
-              SizedBox(
-                height: 17.h,
-              ),
-              ParselWidget(
-                text: 'Наушники',
-                time: '19.08',
-                upgrade: '13:24',
-                where: 'Прошло регистрацию',
-              ),
-              ParselWidget(
-                text: 'Платье',
-                time: '15.08',
-                upgrade: '15:40',
-                where: 'Доставлено',
-              ),
-            ],
+          child: Center(
+            child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 11.h,
+                ),
+                DropButton(),
+                SizedBox(
+                  height: 17.h,
+                ),
+                ParselWidget(
+                  text: 'Наушники',
+                  time: '19.08',
+                  upgrade: '13:24',
+                  where: 'Прошло регистрацию',
+                ),
+                ParselWidget(
+                  text: 'Платье',
+                  time: '15.08',
+                  upgrade: '15:40',
+                  where: 'Доставлено',
+                ),
+              ],
+            ),
           ),
         ));
   }

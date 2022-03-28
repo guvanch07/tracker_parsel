@@ -1,4 +1,4 @@
-package com.example.tracker_pkg
+package com.entex.tracker_pkg
 
 import io.flutter.embedding.android.FlutterActivity
 
