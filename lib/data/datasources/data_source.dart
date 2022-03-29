@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tracker_pkg/data/models/info_parsel.dart';
 import 'package:tracker_pkg/data/models/register.dart';
 
 String key = '7B81A74097D71028ED9E0BB949C37CD6';
@@ -57,11 +58,12 @@ Future<Object> infoAboutParcel(String number) async {
     var mapResponse = json.decode(response.body);
     print('data  $mapResponse');
     var rest = mapResponse['data'];
-    print('rest  $rest');
-    var ret = List<Data>.from(rest.map((json) => Data.fromJson(json)));
+    print('mapResponse $rest');
+
+    //var ret = rest.map<Data2>((json) => Data2.fromJson(json)).toList();
     // //
     print('cool');
-    print(ret);
+    //print(ret);
   } else {
     print(response.statusCode);
     print(response.body);

@@ -73,8 +73,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: PaymentScreen(),
-          //home: TabScreen(),
+
+          /// home: PaymentScreen(),
+          home: TabScreen(),
         ),
         designSize: const Size(414, 896),
       ),

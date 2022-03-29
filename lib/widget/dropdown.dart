@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-class ListItem {
-  int value;
-  String name;
-  ListItem(this.value, this.name);
-}
+//
+// class ListItem {
+//   int value;
+//   String name;
+//   ListItem(this.value, this.name);
+// }
 
 class DropButton extends StatefulWidget {
   const DropButton({Key? key}) : super(key: key);

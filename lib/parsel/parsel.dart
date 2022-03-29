@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -49,8 +50,8 @@ class ParselScreen extends StatelessWidget {
           ),
           backgroundColor: Colors.transparent,
         ),
-        body: SafeArea(
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -59,20 +60,34 @@ class ParselScreen extends StatelessWidget {
                 ),
                 DropButton(),
                 SizedBox(
+                  height: 450,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: 10,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ParselWidget(
+                          text: 'Наушники',
+                          time: '19.08',
+                          upgrade: '$index',
+                          where: 'Прошло регистрацию',
+                        );
+                      }),
+                ),
+                SizedBox(
                   height: 17.h,
                 ),
-                ParselWidget(
-                  text: 'Наушники',
-                  time: '19.08',
-                  upgrade: '13:24',
-                  where: 'Прошло регистрацию',
-                ),
-                ParselWidget(
-                  text: 'Платье',
-                  time: '15.08',
-                  upgrade: '15:40',
-                  where: 'Доставлено',
-                ),
+                // ParselWidget(
+                //   text: 'Наушники',
+                //   time: '19.08',
+                //   upgrade: '13:24',
+                //   where: 'Прошло регистрацию',
+                // ),
+                // ParselWidget(
+                //   text: 'Платье',
+                //   time: '15.08',
+                //   upgrade: '15:40',
+                //   where: 'Доставлено',
+                // ),
               ],
             ),
           ),

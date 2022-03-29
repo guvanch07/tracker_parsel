@@ -98,7 +98,7 @@ class _AddNumberState extends State<AddNumber> {
                   borderradius: 30.r,
                   onPressed: () {
                     //registerParcel('11');
-                    infoAboutParcel('11');
+                    //infoAboutParcel('11');
                     // print(myController.text);
                     // Navigator.push(
                     //   context,

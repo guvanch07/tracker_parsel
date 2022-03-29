@@ -1,13 +1,13 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class Data {
+class Data2 {
   List<Accepted> accepted;
 
-  // Rejected rejected;
-  Data({required this.accepted});
+  //Rejected rejected;
+  Data2({required this.accepted});
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory Data2.fromJson(Map<String, dynamic> json) {
+    return Data2(
         accepted: (json['accepted'] as List)
             .map((item) => Accepted.fromJson(item))
             .toList()
@@ -58,7 +58,7 @@ class Track {
 // "d": "",
 // "z": "Parcel has arrived at transit location"
 class FirstCarrierEvent {
-  DateTime eventTime; //a
+  String eventTime; //a
   String eventLocation; //c
   String eventLocationExtension; //d
   String eventContent; //z
