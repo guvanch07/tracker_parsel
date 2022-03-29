@@ -7,7 +7,6 @@ String key = '7B81A74097D71028ED9E0BB949C37CD6';
 
 @override
 Future<int> registerParcel(String number) async {
-  List? list;
   final response = await http.post(
       Uri.parse('https://api.17track.net/track/v1/register'),
       headers: {'17token': '$key', 'Content-Type': 'application/json'},
@@ -48,7 +47,8 @@ Future<Object> infoAboutParcel(String number) async {
     print(decodedResponse);
     var ret = Data2.fromJson(decodedResponse['data']);
     print('cool');
-    print(ret.accepted.first.number);
+
+    print(ret.accepted?.first?.track?.firstCarrierEvent?.first?.eventContent);
   } else {
     print(request.statusCode);
     print(request.body);

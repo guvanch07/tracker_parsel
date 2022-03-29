@@ -1,36 +1,40 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 class Data2 {
-  List<Acceptedd> accepted;
+  List<Accepted?>? accepted;
+
+  //List<Rejected?>? rejected;
 
   // Rejected rejected;
-  Data2({required this.accepted});
+  Data2({this.accepted});
 
   factory Data2.fromJson(Map<String, dynamic> json) {
     return Data2(
-        accepted: (json['accepted'] as List<Acceptedd>)
+        accepted: (json['accepted'] as List<Accepted>)
             .map((dynamic item) =>
-                Acceptedd.fromJson(item as Map<String, dynamic>))
+                Accepted.fromJson(item as Map<String, dynamic>))
             .toList()
         // rejected: Rejected.fromJson(json["rejected"]),
         );
   }
 }
 
-class Acceptedd {
-  String number;
-  Track track;
+class Accepted {
+  String? number;
+  Track? track;
 
-  Acceptedd({required this.track, required this.number});
+  Accepted({required this.track, required this.number});
 
-  factory Acceptedd.fromJson(Map<String, dynamic> json) {
-    return Acceptedd(
-        number: json['number'], track: Track.fromJson(json['track']));
+  factory Accepted.fromJson(Map<String, dynamic> json) {
+    return Accepted(
+      number: json['number'],
+      track: Track.fromJson(
+        json['track'],
+      ),
+    );
   }
 }
 
 class Track {
-  List<FirstCarrierEvent> firstCarrierEvent; //z1
+  List<FirstCarrierEvent?>? firstCarrierEvent; //z1
   //SecondCarrierEvent secondCarrierEvent; //z2
 
   Track(
@@ -59,7 +63,7 @@ class Track {
 // "d": "",
 // "z": "Parcel has arrived at transit location"
 class FirstCarrierEvent {
-  DateTime eventTime; //a
+  String eventTime; //a
   String eventLocation; //c
   String eventLocationExtension; //d
   String eventContent; //z
