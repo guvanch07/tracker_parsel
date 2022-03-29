@@ -1,29 +1,29 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Data {
-  List<Accepted> accepted;
+  List<Acceptedd> accepted;
 
   // Rejected rejected;
   Data({required this.accepted});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-        accepted: (json['accepted'] as List)
-            .map((item) => Accepted.fromJson(item))
+        accepted: (json['accepted'] as List<Acceptedd>)
+            .map((dynamic item) => Acceptedd.fromJson(item as Map<String, dynamic>))
             .toList()
         // rejected: Rejected.fromJson(json["rejected"]),
         );
   }
 }
 
-class Accepted {
+class Acceptedd {
   String number;
   Track track;
 
-  Accepted({required this.track, required this.number});
+  Acceptedd({required this.track, required this.number});
 
-  factory Accepted.fromJson(Map<String, dynamic> json) {
-    return Accepted(
+  factory Acceptedd.fromJson(Map<String, dynamic> json) {
+    return Acceptedd(
         number: json['number'], track: Track.fromJson(json['track']));
   }
 }
@@ -69,14 +69,10 @@ class FirstCarrierEvent {
       required this.eventContent});
 
   factory FirstCarrierEvent.fromJson(Map<String, dynamic> json) {
-    final eventTime = json['a'];
-    final eventLocation = json['c']; //c
-    final eventLocationExtension = json['d']; //d
-    final eventContent = json['z'];
     return FirstCarrierEvent(
-        eventTime: eventTime,
-        eventLocation: eventLocation,
-        eventLocationExtension: eventLocationExtension,
-        eventContent: eventContent);
+        eventTime: json['a'],
+        eventLocation: json['c'],
+        eventLocationExtension: json['d'],
+        eventContent: json['z']);
   }
 }
