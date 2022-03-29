@@ -1,14 +1,14 @@
-class Data1 {
+class Data {
   List<Accepted?>? accepted;
   List<Rejected?>? rejected;
-  Data1({this.rejected, this.accepted});
-  factory Data1.fromJson(Map<String, dynamic> json) {
-    return Data1(
-      accepted: (json['accepted'] as List)
-          .map((item) => Accepted.fromJson(item))
+  Data({this.rejected, this.accepted});
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      accepted: (json['accepted'] as List?)
+          ?.map((item) => Accepted.fromJson(item))
           .toList(),
-      rejected: (json['rejected'] as List)
-          .map((item) => Rejected.fromJson(item))
+      rejected: (json['rejected'] as List?)
+          ?.map((item) => Rejected.fromJson(item))
           .toList(),
     );
   }
@@ -42,9 +42,9 @@ class Error {
 // "carrier": 12021
 //
 class Accepted {
-  int origin;
-  String number;
-  int carrier;
+  int? origin;
+  String? number;
+  int? carrier;
 
   Accepted({required this.origin, required this.number, required this.carrier});
 
