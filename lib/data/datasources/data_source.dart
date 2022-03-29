@@ -20,7 +20,7 @@ Future<int> registerParcel(String number) async {
     print(decodedResponse);
     var ret = Data1.fromJson(decodedResponse['data']);
     print('cool');
-    print(ret.rejected?.first?.error.message);
+    print(ret.rejected?.first?.error?.message);
   } else {
     print(response.statusCode);
     print('Erroor');
@@ -48,7 +48,7 @@ Future<Object> infoAboutParcel(String number) async {
     var ret = Data2.fromJson(decodedResponse['data']);
     print('cool');
 
-    print(ret.accepted?.first?.track?.firstCarrierEvent?.first?.eventContent);
+    print(ret.accepted?.first?.track?.firstCarrierEvent?.first?.eventTime);
   } else {
     print(request.statusCode);
     print(request.body);

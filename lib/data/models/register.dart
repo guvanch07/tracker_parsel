@@ -15,8 +15,8 @@ class Data1 {
 }
 
 class Rejected {
-  String number;
-  Error error;
+  String? number;
+  Error? error;
 
   Rejected({required this.number, required this.error});
 

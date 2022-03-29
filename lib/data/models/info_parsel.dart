@@ -8,12 +8,11 @@ class Data2 {
 
   factory Data2.fromJson(Map<String, dynamic> json) {
     return Data2(
-        accepted: (json['accepted'] as List<Accepted>)
-            .map((dynamic item) =>
-                Accepted.fromJson(item as Map<String, dynamic>))
-            .toList()
-        // rejected: Rejected.fromJson(json["rejected"]),
-        );
+      accepted: (json['accepted'] as List?)
+          ?.map((item) => Accepted.fromJson(item))
+          .toList(),
+      // rejected: Rejected.fromJson(json["rejected"]),
+    );
   }
 }
 
@@ -43,15 +42,10 @@ class Track {
       required this.firstCarrierEvent});
 
   factory Track.fromJson(Map<String, dynamic> json) {
-    final firstCarrierEventData = json['z1'];
-    final firstCarrierEvent = firstCarrierEventData != null
-        ? firstCarrierEventData
-            .map((firstCarrierEventData) =>
-                FirstCarrierEvent.fromJson(firstCarrierEventData))
-            .toList()
-        : <FirstCarrierEvent>[];
     return Track(
-      firstCarrierEvent: firstCarrierEvent, //z1
+      firstCarrierEvent: (json['z1'] as List?)
+          ?.map((item) => FirstCarrierEvent.fromJson(item))
+          .toList(), //z1
       // secondCarrierEvent:
       // SecondCarrierEvent.fromJson(json['z2'])
     ); //z2
@@ -63,10 +57,10 @@ class Track {
 // "d": "",
 // "z": "Parcel has arrived at transit location"
 class FirstCarrierEvent {
-  String eventTime; //a
-  String eventLocation; //c
-  String eventLocationExtension; //d
-  String eventContent; //z
+  String? eventTime; //a
+  String? eventLocation; //c
+  String? eventLocationExtension; //d
+  String? eventContent; //z
   FirstCarrierEvent(
       {required this.eventTime,
       required this.eventLocation,
