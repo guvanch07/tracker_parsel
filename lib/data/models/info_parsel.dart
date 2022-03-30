@@ -43,7 +43,7 @@ class Track {
 
   factory Track.fromJson(Map<String, dynamic> json) {
     return Track(
-      firstCarrierEvent: (json['z1'] as List?)
+      firstCarrierEvent: (json['z2'] as List?)
           ?.map((item) => FirstCarrierEvent.fromJson(item))
           .toList(), //z1
       // secondCarrierEvent:

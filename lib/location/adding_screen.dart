@@ -89,6 +89,7 @@ class _AddNumberState extends State<AddNumber> {
                     hintText: '  ${context.watch<LogicBarCode>().scanValue}',
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
+                      //SB071931150LV
                     ),
                   ),
                 ),
@@ -97,13 +98,17 @@ class _AddNumberState extends State<AddNumber> {
               PrimaryButton(
                   borderradius: 30.r,
                   onPressed: () {
+                    print(myController.text);
+                    // var ret = infoAboutParcel('11');
+                    // print(ret);
                     //registerParcel('11');
-                    infoAboutParcel('11');
                     // print(myController.text);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => Following()),
-                    // );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Following(number: myController.text),
+                        ));
                   },
                   text: '+   Добавить')
             ],
@@ -113,28 +118,33 @@ class _AddNumberState extends State<AddNumber> {
     );
   }
 
-  //
-  // Widget textfield() {
-  //
-  //   return Container(
-  //     height: 50,
-  //     decoration: BoxDecoration(
-  //         color: Colors.white, borderRadius: BorderRadius.circular(45)),
-  //     margin: EdgeInsets.symmetric(horizontal: 20),
-  //     child: TextField(
-  //       controller: myController,
-  //       cursorColor: kTextColor,
-  //       style: kText22,
-  //       decoration: InputDecoration(
-  //         hintStyle: kText14,
-  //         hintText: '  ${context.watch<LogicBarCode>().scanValue}',
-  //         border: OutlineInputBorder(
-  //           borderSide: BorderSide.none,
-  //         ),
-  //       ),
-  //     ),
-  //   );
+  // get() async {
+  //   var ret = await infoAboutParcel('11');
+  //   return ret;
   // }
+
+//
+// Widget textfield() {
+//
+//   return Container(
+//     height: 50,
+//     decoration: BoxDecoration(
+//         color: Colors.white, borderRadius: BorderRadius.circular(45)),
+//     margin: EdgeInsets.symmetric(horizontal: 20),
+//     child: TextField(
+//       controller: myController,
+//       cursorColor: kTextColor,
+//       style: kText22,
+//       decoration: InputDecoration(
+//         hintStyle: kText14,
+//         hintText: '  ${context.watch<LogicBarCode>().scanValue}',
+//         border: OutlineInputBorder(
+//           borderSide: BorderSide.none,
+//         ),
+//       ),
+//     ),
+//   );
+// }
 }
 
 class TabScreen extends StatefulWidget {

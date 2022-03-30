@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/data/datasources/data_source.dart';
 import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/logic/barcode.dart';
 import 'package:tracker_pkg/location/track_follow.dart';
@@ -8,6 +10,27 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Following extends StatelessWidget {
+  String number;
+  Following({required this.number});
+  List<String> months = [
+    'January  ',
+    'February',
+    'March    ',
+    'April    ',
+    'May      ',
+    'June     ',
+    'July     ',
+    'August   ',
+    'September',
+    'October  ',
+    'November ',
+    'December '
+  ];
+  final NetworkService personService = NetworkService();
+
+  // Future<Object> Function(String number) info;
+  // Following({required this.info});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,85 +67,171 @@ class Following extends StatelessWidget {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(
-                  left: 25.w,
-                  right: 25.w,
-                  top: 16.h,
-                  bottom: 23.h,
-                ),
-                height: 44.h,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(80)),
-                child: Center(
-                  child: Text(
-                    '${context.watch<LogicBarCode>().scanValue}',
-                    style: TextStyle(fontSize: 22.sp, color: kTextColor),
+      body: FutureBuilder(
+          future: personService.infoAboutParcel(number),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                      left: 25.w,
+                      right: 25.w,
+                      top: 16.h,
+                      bottom: 23.h,
+                    ),
+                    height: 44.h,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(80)),
+                    child: Center(
+                      child: Text(
+                        number,
+                        //'${context.watch<LogicBarCode>().scanValue}',
+                        style: TextStyle(fontSize: 22.sp, color: kTextColor),
+                      ),
+                    ),
                   ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  // Text(
+                  //   '',
+                  //   style: TextStyle(fontSize: 25.sp, color: kTextColor),
+                  // ),
+                  SizedBox(
+                    height: 700.h,
+                    child: ListView.builder(
+                      itemCount: snapshot
+                          .data.accepted.first.track.firstCarrierEvent
+                          .toList()
+                          .length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var current = snapshot
+                            .data.accepted.first.track.firstCarrierEvent[index];
+                        DateTime tempData = DateTime.parse(current.eventTime);
+                        return Column(
+                          children: [
+                            index == 0
+                                ? FollowContainer(
+                                    month: months[tempData.month - 1],
+                                    date: tempData.day.toString(),
+                                    locate: current.eventLocation,
+                                    maintext: current.eventContent,
+                                    updash: Container(
+                                      height: 35,
+                                      width: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : SizedBox(),
+                            index != 0 &&
+                                    index !=
+                                        snapshot.data.accepted.first.track
+                                                .firstCarrierEvent
+                                                .toList()
+                                                .length -
+                                            1
+                                ? FollowContainer(
+                                    month: months[tempData.month - 1],
+                                    date: tempData.day.toString(),
+                                    locate: current.eventLocation,
+                                    maintext: current.eventContent,
+                                  )
+                                : SizedBox(),
+                            index ==
+                                    snapshot.data.accepted.first.track
+                                            .firstCarrierEvent
+                                            .toList()
+                                            .length -
+                                        1
+                                ? FollowContainer(
+                                    month: months[tempData.month - 1],
+                                    date: tempData.day.toString(),
+                                    locate: current.eventLocation,
+                                    maintext: current.eventContent,
+                                    downdash: Container(
+                                      height: 35,
+                                      width: 2,
+                                      color: Colors.white,
+                                    ))
+                                : SizedBox(),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 22.h,
+                  // ),
+                  // FollowContainer(
+                  //   maintext: 'Доставлено',
+                  //   updash: Container(
+                  //     height: 35,
+                  //     width: 2,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
+                  // FollowContainer(
+                  //   locate: '',
+                  //   maintext: 'Неизвестная ошибка',
+                  //   dateOrWidget: Icon(
+                  //     Icons.help_outline,
+                  //     color: Color(0xff666E6D),
+                  //     size: 26,
+                  //   ),
+                  // ),
+                  // FollowContainer(
+                  //   maintext:
+                  //       'Прибыло в сортировочный центр страны назначения ',
+                  //   date: '13',
+                  // ),
+                  // FollowContainer(
+                  //   maintext: 'Передано в доставку Беларуси',
+                  //   date: '12',
+                  //   locate: '',
+                  // ),
+                  // FollowContainer(
+                  //   maintext: 'Выпущено таможней (0. 05 кг)',
+                  //   date: '12',
+                  //   locate: 'Брест, Беларусь',
+                  // ),
+                  // FollowContainer(
+                  //   maintext: 'Прием на таможню (0. 05 кг)',
+                  //   date: '7',
+                  //   locate: 'Брест, Беларусь',
+                  // ),
+                  // FollowContainer(
+                  //     maintext: 'Прошло регистрацию',
+                  //     date: '2',
+                  //     locate: 'Варшава, Польша',
+                  //     downdash: Container(
+                  //       height: 35,
+                  //       width: 2,
+                  //       color: Colors.white,
+                  //     )),
+                ],
+              );
+            }
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+            // if (snapshot.has) {
+            //   return Text('f');
+            // }
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 20.0,
                 ),
-              ),
-              Text(
-                'Наушники',
-                style: TextStyle(fontSize: 25.sp, color: kTextColor),
-              ),
-              SizedBox(
-                height: 22.h,
-              ),
-              FollowContainer(
-                maintext: 'Доставлено',
-                updash: Container(
-                  height: 35,
-                  width: 2,
-                  color: Colors.white,
-                ),
-              ),
-              FollowContainer(
-                locate: '',
-                maintext: 'Неизвестная ошибка',
-                dateOrWidget: Icon(
-                  Icons.help_outline,
-                  color: Color(0xff666E6D),
-                  size: 26,
-                ),
-              ),
-              FollowContainer(
-                maintext: 'Прибыло в сортировочный центр страны назначения ',
-                date: '13',
-              ),
-              FollowContainer(
-                maintext: 'Передано в доставку Беларуси',
-                date: '12',
-                locate: '',
-              ),
-              FollowContainer(
-                maintext: 'Выпущено таможней (0. 05 кг)',
-                date: '12',
-                locate: 'Брест, Беларусь',
-              ),
-              FollowContainer(
-                maintext: 'Прием на таможню (0. 05 кг)',
-                date: '7',
-                locate: 'Брест, Беларусь',
-              ),
-              FollowContainer(
-                  maintext: 'Прошло регистрацию',
-                  date: '2',
-                  locate: 'Варшава, Польша',
-                  downdash: Container(
-                    height: 35,
-                    width: 2,
-                    color: Colors.white,
-                  )),
-            ],
-          ),
-        ),
-      ),
+                Text("Loading, please wait this may take some time")
+              ],
+            ));
+          }),
     );
   }
 }
