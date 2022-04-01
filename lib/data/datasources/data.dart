@@ -1,0 +1,2 @@
+List infoParcel = [];
+List register = [];

@@ -1,6 +1,6 @@
 class Data1 {
-  List<Accepted?>? accepted;
-  List<Rejected?>? rejected;
+  List<Accepted>? accepted;
+  List<Rejected>? rejected;
   Data1({this.rejected, this.accepted});
   factory Data1.fromJson(Map<String, dynamic> json) {
     return Data1(

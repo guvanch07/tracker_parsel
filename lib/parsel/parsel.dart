@@ -6,7 +6,9 @@ import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/location/adding_screen.dart';
+import 'package:tracker_pkg/location/following.dart';
 import 'package:tracker_pkg/parsel/parsel_widget.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/dropdown.dart';
@@ -19,6 +21,12 @@ class ParselScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final provider = Provider.of<GoogleSingInPro>(context, listen: false);
+
+    /// accepted пуст
+    // SB071931150LV  12021 z1
+    // LB013603058CN  3011  z1 z2
+    // LV336687519CN  3011 z1 z2
+
     return Scaffold(
         backgroundColor: kbgc,
         appBar: AppBar(
@@ -62,32 +70,56 @@ class ParselScreen extends StatelessWidget {
                 SizedBox(
                   height: 450,
                   child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 10,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ParselWidget(
-                          text: 'Наушники',
-                          time: '19.08',
-                          upgrade: '$index',
-                          where: 'Прошло регистрацию',
-                        );
-                      }),
+                    shrinkWrap: true,
+                    itemCount: infoParcel.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      det() {
+                        if (infoParcel[index]
+                                .accepted
+                                .first
+                                .track
+                                .secondCarrierEvent
+                                .length ==
+                            0) {
+                          return 1;
+                        } else {
+                          return 2;
+                        }
+                      }
+
+                      var current = infoParcel[index].accepted?.first;
+                      DateTime tempData = DateTime.parse(det() == 1
+                          ? current.track.firstCarrierEvent[0].eventTime
+                          : current.track.secondCarrierEvent[0].eventTime);
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Following(
+                                indexParcel: index,
+                              ),
+                            ),
+                          );
+                        },
+                        child: ParselWidget(
+                          text: current.number,
+                          time:
+                              '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                          upgrade: '',
+                          where: det() == 1
+                              ? current.track.firstCarrierEvent[0].eventContent
+                              : current
+                                  .track.secondCarrierEvent[0].eventContent,
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 17.h,
                 ),
-                // ParselWidget(
-                //   text: 'Наушники',
-                //   time: '19.08',
-                //   upgrade: '13:24',
-                //   where: 'Прошло регистрацию',
-                // ),
-                // ParselWidget(
-                //   text: 'Платье',
-                //   time: '15.08',
-                //   upgrade: '15:40',
-                //   where: 'Доставлено',
-                // ),
               ],
             ),
           ),

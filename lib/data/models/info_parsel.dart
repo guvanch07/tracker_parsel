@@ -34,21 +34,22 @@ class Accepted {
 
 class Track {
   List<FirstCarrierEvent?>? firstCarrierEvent; //z1
-  //SecondCarrierEvent secondCarrierEvent; //z2
+  List<SecondCarrierEvent?>? secondCarrierEvent; //z2
 
   Track(
       {
       // required this.secondCarrierEvent,
-      required this.firstCarrierEvent});
+      required this.firstCarrierEvent,
+      required this.secondCarrierEvent});
 
   factory Track.fromJson(Map<String, dynamic> json) {
     return Track(
-      firstCarrierEvent: (json['z2'] as List?)
-          ?.map((item) => FirstCarrierEvent.fromJson(item))
-          .toList(), //z1
-      // secondCarrierEvent:
-      // SecondCarrierEvent.fromJson(json['z2'])
-    ); //z2
+        firstCarrierEvent: (json['z1'] as List?)
+            ?.map((item) => FirstCarrierEvent.fromJson(item))
+            .toList(), //z1
+        secondCarrierEvent: (json['z2'] as List?)
+            ?.map((item) => SecondCarrierEvent.fromJson(item))
+            .toList()); //z2
   }
 }
 
@@ -69,6 +70,26 @@ class FirstCarrierEvent {
 
   factory FirstCarrierEvent.fromJson(Map<String, dynamic> json) {
     return FirstCarrierEvent(
+        eventTime: json['a'],
+        eventLocation: json['c'],
+        eventLocationExtension: json['d'],
+        eventContent: json['z']);
+  }
+}
+
+class SecondCarrierEvent {
+  String? eventTime; //a
+  String? eventLocation; //c
+  String? eventLocationExtension; //d
+  String? eventContent; //z
+  SecondCarrierEvent(
+      {required this.eventTime,
+      required this.eventLocation,
+      required this.eventLocationExtension,
+      required this.eventContent});
+
+  factory SecondCarrierEvent.fromJson(Map<String, dynamic> json) {
+    return SecondCarrierEvent(
         eventTime: json['a'],
         eventLocation: json['c'],
         eventLocationExtension: json['d'],

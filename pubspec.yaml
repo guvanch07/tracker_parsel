@@ -35,7 +35,7 @@ dependencies:
   flutter_native_splash: ^1.2.3
   expandable: ^5.0.1
   firebase_core: ^1.6.0
-  firebase_auth: ^3.1.1
+  firebase_auth: ^2.0.0
   google_sign_in: ^5.1.0
   flutter_screenutil: ^5.0.0+2
   firebase_messaging: ^10.0.7
@@ -44,6 +44,7 @@ dependencies:
   equatable: ^2.0.3
   purchases_flutter: ^3.9.5
   get: ^4.6.1
+  firebase_messaging_platform_interface: 3.1.6
 
 
 
