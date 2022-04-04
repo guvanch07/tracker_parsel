@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/payment/profile_payment.dart';
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: ScreenUtilInit(
-        builder: () => MaterialApp(
+        builder: () => GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(

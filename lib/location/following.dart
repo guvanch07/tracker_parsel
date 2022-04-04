@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Following extends StatelessWidget {
-  //String number;
   int indexParcel;
 
   Following({required this.indexParcel});
@@ -31,18 +30,9 @@ class Following extends StatelessWidget {
     'December '
   ];
 
-  //final NetworkService personService = NetworkService();
-
-  // Future<Object> Function(String number) info;
-  // Following({required this.info});
-  //int lengt;
-
   det() {
-    if (infoParcel[indexParcel]
-            .accepted
-            .first
-            .track
-            .secondCarrierEvent
+    if (controllerData
+            .infoParcel[indexParcel].accepted.first.track.secondCarrierEvent
             .toList()
             .length ==
         0) {
@@ -53,53 +43,24 @@ class Following extends StatelessWidget {
   }
 
   inf() {
-    if (infoParcel[indexParcel]
-            .accepted
-            .first
-            .track
-            .secondCarrierEvent
+    if (controllerData
+            .infoParcel[indexParcel].accepted.first.track.secondCarrierEvent
             .toList()
             .length ==
         0) {
-      return infoParcel[indexParcel]
-              .accepted
-              .first
-              .track
-              .firstCarrierEvent
+      return controllerData
+              .infoParcel[indexParcel].accepted.first.track.firstCarrierEvent
               .toList()
               .length -
           1;
     } else {
-      return infoParcel[indexParcel]
-              .accepted
-              .first
-              .track
-              .secondCarrierEvent
+      return controllerData
+              .infoParcel[indexParcel].accepted.first.track.secondCarrierEvent
               .toList()
               .length -
           1;
     }
   }
-
-  // len() {
-  //   if(det() == 1){
-  //     lengt = infoParcel[indexParcel]
-  //         .accepted
-  //         .first
-  //         .track
-  //         .secondCarrierEvent
-  //         .toList()
-  //         .length;
-  //   } else {
-  //     lengt = infoParcel[indexParcel]
-  //         .accepted
-  //         .first
-  //         .track
-  //         .secondCarrierEvent
-  //         .toList()
-  //         .length;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +112,7 @@ class Following extends StatelessWidget {
                 color: Colors.white, borderRadius: BorderRadius.circular(80)),
             child: Center(
               child: Text(
-                infoParcel[indexParcel].accepted.first.number,
+                controllerData.infoParcel[indexParcel].accepted.first.number,
                 //'${context.watch<LogicBarCode>().scanValue}',
                 style: TextStyle(fontSize: 22.sp, color: kTextColor),
               ),
@@ -160,40 +121,24 @@ class Following extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          // Text(
-          //   '',
-          //   style: TextStyle(fontSize: 25.sp, color: kTextColor),
-          // ),
           SizedBox(
             height: 700.h,
             child: ListView.builder(
               itemCount: det() == 1
-                  ? infoParcel[indexParcel]
-                      .accepted
-                      .first
-                      .track
+                  ? controllerData.infoParcel[indexParcel].accepted.first.track
                       .firstCarrierEvent
                       .toList()
                       .length
-                  : infoParcel[indexParcel]
-                      .accepted
-                      .first
-                      .track
+                  : controllerData.infoParcel[indexParcel].accepted.first.track
                       .secondCarrierEvent
                       .toList()
                       .length,
               itemBuilder: (BuildContext context, int index) {
                 var current = det() == 1
-                    ? infoParcel[indexParcel]
-                        .accepted
-                        .first
-                        .track
-                        .firstCarrierEvent[index]
-                    : infoParcel[indexParcel]
-                        .accepted
-                        .first
-                        .track
-                        .secondCarrierEvent[index];
+                    ? controllerData.infoParcel[indexParcel].accepted.first
+                        .track.firstCarrierEvent[index]
+                    : controllerData.infoParcel[indexParcel].accepted.first
+                        .track.secondCarrierEvent[index];
                 DateTime tempData = DateTime.parse(current.eventTime);
                 return Column(
                   children: [
@@ -211,14 +156,6 @@ class Following extends StatelessWidget {
                           )
                         : SizedBox(),
                     index != 0 && index != inf()
-                        // infoParcel[indexParcel]
-                        //         .accepted
-                        //         .first
-                        //         .track
-                        //         .firstCarrierEvent
-                        //         .toList()
-                        //         .length -
-                        //     1
                         ? FollowContainer(
                             month: months[tempData.month - 1],
                             date: tempData.day.toString(),
@@ -227,14 +164,6 @@ class Following extends StatelessWidget {
                           )
                         : SizedBox(),
                     index == inf()
-                        // infoParcel[indexParcel]
-                        //         .accepted
-                        //         .first
-                        //         .track
-                        //         .firstCarrierEvent
-                        //         .toList()
-                        //         .length -
-                        //     1
                         ? FollowContainer(
                             month: months[tempData.month - 1],
                             date: tempData.day.toString(),
@@ -251,55 +180,6 @@ class Following extends StatelessWidget {
               },
             ),
           ),
-          // SizedBox(
-          //   height: 22.h,
-          // ),
-          // FollowContainer(
-          //   maintext: 'Доставлено',
-          //   updash: Container(
-          //     height: 35,
-          //     width: 2,
-          //     color: Colors.white,
-          //   ),
-          // ),
-          // FollowContainer(
-          //   locate: '',
-          //   maintext: 'Неизвестная ошибка',
-          //   dateOrWidget: Icon(
-          //     Icons.help_outline,
-          //     color: Color(0xff666E6D),
-          //     size: 26,
-          //   ),
-          // ),
-          // FollowContainer(
-          //   maintext:
-          //       'Прибыло в сортировочный центр страны назначения ',
-          //   date: '13',
-          // ),
-          // FollowContainer(
-          //   maintext: 'Передано в доставку Беларуси',
-          //   date: '12',
-          //   locate: '',
-          // ),
-          // FollowContainer(
-          //   maintext: 'Выпущено таможней (0. 05 кг)',
-          //   date: '12',
-          //   locate: 'Брест, Беларусь',
-          // ),
-          // FollowContainer(
-          //   maintext: 'Прием на таможню (0. 05 кг)',
-          //   date: '7',
-          //   locate: 'Брест, Беларусь',
-          // ),
-          // FollowContainer(
-          //     maintext: 'Прошло регистрацию',
-          //     date: '2',
-          //     locate: 'Варшава, Польша',
-          //     downdash: Container(
-          //       height: 35,
-          //       width: 2,
-          //       color: Colors.white,
-          //     )),
         ],
       ),
     );

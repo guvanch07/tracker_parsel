@@ -6,21 +6,60 @@ import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/const/styless.dart';
-import 'package:tracker_pkg/data/datasources/data.dart';
+import 'package:tracker_pkg/data/datasources/data_source.dart';
 import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/location/following.dart';
 import 'package:tracker_pkg/parsel/parsel_widget.dart';
-import 'package:tracker_pkg/widget/button.dart';
 import 'package:tracker_pkg/widget/dropdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ParselScreen extends StatelessWidget {
+var time = '${DateTime.now().hour}:${DateTime.now().minute}';
+
+class ParselScreen extends StatefulWidget {
   const ParselScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ParselScreen> createState() => _ParselScreenState();
+}
+
+class _ParselScreenState extends State<ParselScreen> {
+  ScrollController? _controller;
+  String message = "";
+
+  _scrollListener() {
+    if (_controller!.offset >= _controller!.position.maxScrollExtent &&
+        !_controller!.position.outOfRange) {
+      setState(() {
+        message = "reach the bottom";
+      });
+    }
+    if (_controller!.offset <= _controller!.position.minScrollExtent &&
+        !_controller!.position.outOfRange) {
+      setState(() {
+        message = "reach the top";
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    _controller!.addListener(_scrollListener);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller!.removeListener(_scrollListener);
+    _controller!.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final provider = Provider.of<GoogleSingInPro>(context, listen: false);
+    // var time = '${DateTime.now().hour}:${DateTime.now().minute}';
 
     /// accepted пуст
     // SB071931150LV  12021 z1
@@ -66,20 +105,34 @@ class ParselScreen extends StatelessWidget {
                 SizedBox(
                   height: 11.h,
                 ),
-                DropButton(),
+                Row(
+                  children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width - 50,
+                        child: DropButton()),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          NetworkService().updateInfoAboutParcel();
+                          time =
+                              '${DateTime.now().hour}:${DateTime.now().minute}';
+                          //time = DateTime.now().isUtc;
+                        });
+                      },
+                      icon: Icon(Icons.update),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: 450,
                   child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: infoParcel.length,
+                    controller: _controller,
+                    //shrinkWrap: true,
+                    itemCount: controllerData.infoParcel.length,
                     itemBuilder: (BuildContext context, int index) {
                       det() {
-                        if (infoParcel[index]
-                                .accepted
-                                .first
-                                .track
-                                .secondCarrierEvent
-                                .length ==
+                        if (controllerData.infoParcel[index].accepted.first
+                                .track.secondCarrierEvent.length ==
                             0) {
                           return 1;
                         } else {
@@ -87,7 +140,8 @@ class ParselScreen extends StatelessWidget {
                         }
                       }
 
-                      var current = infoParcel[index].accepted?.first;
+                      var current =
+                          controllerData.infoParcel[index].accepted?.first;
                       DateTime tempData = DateTime.parse(det() == 1
                           ? current.track.firstCarrierEvent[0].eventTime
                           : current.track.secondCarrierEvent[0].eventTime);
@@ -107,7 +161,7 @@ class ParselScreen extends StatelessWidget {
                           text: current.number,
                           time:
                               '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
-                          upgrade: '',
+                          upgrade: time.toString(),
                           where: det() == 1
                               ? current.track.firstCarrierEvent[0].eventContent
                               : current

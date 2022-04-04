@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/data/models/info_parsel.dart';
@@ -14,19 +15,24 @@ String key = '7B81A74097D71028ED9E0BB949C37CD6';
 /// + номер написан с маленькой буквы
 /// + у номера лишние пробелы спереди, сзади и спереди
 /// + если есть в посыле z2 показываем его, в противном случае z1
-///
-///
+///  +  z1 and z2 пусто
+///  + обновить данные при нажатии на кнопку
+///  + accepted пуст
 ///
 ///
 ///  обновлять данные при входе
 ///  обновлять данные при отведении в низ
-///  accepted пуст
+///   (
+//   I/flutter (11616): {code: 0, data: {accepted: [],
+//           //       rejected: [{number: LV336687519CN,
+//           //       error: {code: -18019909, message: No tracking information at this time.}}]}})
 ///
 ///
 /// - кто то добавил посылку в базу(не наш пользователь или наш пользователь(но он удалил приложение и поставил его заново))
 /// - отступы в самом номере(SB071    93  1150  LV)
 ///
 ///
+final controllerData = Get.put(DataSource());
 
 class NetworkService {
   @override
@@ -35,39 +41,35 @@ class NetworkService {
         Uri.parse('https://api.17track.net/track/v1/register'),
         headers: {'17token': '$key', 'Content-Type': 'application/json'},
         body: "[{'number': '$number'}]");
-
-    //print(response.body);
     if (response.statusCode == 200) {
       var decodedResponse =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       print(decodedResponse);
       var ret = Data1.fromJson(decodedResponse['data']);
-
       print('cool');
-      //print(ret.rejected?.first?.error?.message);
       if (ret.accepted?.length == 0) {
         print('ret.accepted?.length == 0');
         if (ret.rejected?.first.error?.code == -18019903 ||
             ret.rejected?.first.error?.code == -18010012 ||
             ret.rejected?.first.error?.code == -18010013) {
           print('номер некорректный');
-
-          /// Show SnackBar(номер некорректный)
+          Get.snackbar('Tracker Parcel', 'Номер некорректный');
         }
         if (ret.rejected?.first.error?.code == -18019901) {
           print('номер уже был добавлен в базу');
-          if (register.isNotEmpty) {
-            for (int i = 0; i < register.length; i++) {
+          if (controllerData.register.isNotEmpty) {
+            for (int i = 0; i < controllerData.register.length; i++) {
               print(1111);
-              print(register[i].accepted.first.number);
+              print(controllerData.register[i].accepted.first.number);
               print(ret.rejected?.first.number);
               print('ok');
-              if (register[i].accepted.first.number ==
+              if (controllerData.register[i].accepted.first.number ==
                   ret.rejected?.first.number) {
                 print(
                     'ваш номер был зарегистрирован в базе, информацию по нему можете посмотреть в ваших посылках)');
 
-                /// Show SnackBar(ваш номер был зарегистрирован в базе, информацию по нему можете посмотреть в ваших посылках)
+                Get.snackbar('Tracker Parcel',
+                    'ваш номер был зарегистрирован в базе,\информациюпо нему можете посмотреть в ваших посылках');
                 break;
               }
             }
@@ -79,11 +81,6 @@ class NetworkService {
           // SB071931150LV  12021
           // LB013603058CN  3011
           // LV336687519CN  3011
-
-          //   I/flutter (11616): {code: 0, data: {accepted: [],
-          //       rejected: [{number: LV336687519CN,
-          //       error: {code: -18019909, message: No tracking information at this time.}}]}}
-          // show snackBar (e)
         }
         if (ret.rejected?.first.error?.code != -18019903 &&
             ret.rejected?.first.error?.code != -18010012 &&
@@ -91,26 +88,21 @@ class NetworkService {
           print('ошибка');
           print(ret.rejected?.first.error?.code);
           print(ret.rejected?.first.error?.message);
-
-          /// Show SnackBar(номер некорректный)
+          Get.snackbar('Tracker Parcel', 'Номер некорректный');
         }
-        //print('as');
-        //print(register[0].rejected?.first?.error?.code);
       } else {
         print(
             'посылка не была зарегистраирована ни этим понльзователем ни кем либо еще');
-        register.add(ret);
-        print(register.length);
-        print(register.last.accepted?.first?.number);
-        infoAboutParcel(register.last.accepted?.first?.number,
-            register.last.accepted?.first?.carrier);
-
-        //print(ret.accepted);
+        controllerData.register.add(ret);
+        print(controllerData.register.length);
+        print(controllerData.register.last.accepted?.first?.number);
+        infoAboutParcel(controllerData.register.last.accepted?.first?.number,
+            controllerData.register.last.accepted?.first?.carrier);
         print('no');
+        Get.snackbar('Tracker Parcel', 'Ваша посылка была успешно добавлена');
 
-        ///Show snackBar(ваша посылка была успешно добавлена)
+        ///Show snackBar()
       }
-      //print(register[0].rejected?.first?.error?.message);
     } else {
       print(response.statusCode);
       print('Erroor');
@@ -120,7 +112,6 @@ class NetworkService {
     return 1;
   }
 
-//List infoParcel = [];
   @override
   Future infoAboutParcel(String number, int carrier) async {
     var client = http.Client();
@@ -128,38 +119,117 @@ class NetworkService {
         Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
         headers: {'17token': '$key', 'Content-Type': 'application/json'},
         body: "[{'number': '$number', 'carrier': '${carrier.toString()}'}]");
-
-    /// change carrier for number
     if (request.statusCode == 200) {
       var decodedResponse =
           jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
       print(decodedResponse);
       var ret = Data2.fromJson(decodedResponse['data']);
       print('cool');
-
-      /// пробежатся по листу и убедится что данные перезаписываются
-
       if (ret.accepted?.length == 0) {
-        /// проверка
-        //   I/flutter (11616): {code: 0, data: {accepted: [],
-        //       rejected: [{number: LV336687519CN,
-        //       error: {code: -18019909, message: No tracking information at this time.}}]}}
-        // show snackBar (e)
-        ///переделать
+        print('ret.accepted?.length == 0');
+        print('bed.length ==  ${controllerData.bed.length}');
+        controllerData.bed.add(ret);
+        print('bed.length ==  ${controllerData.bed.length}');
+        // SB071931150LV  12021
+        // LB013603058CN  3011
+        // LV336687519CN  3011
+        Get.snackbar('Tracker Parcel', 'No tracking information at this time.');
         print('0000000000000000000');
       } else {
-        infoParcel.add(ret);
+        controllerData.infoParcel.add(ret);
       }
-
       print(ret);
-
-      //print(ret.accepted?.first?.track?.firstCarrierEvent?[0]?.eventTime);
     } else {
       print(request.statusCode);
       print(request.body);
       throw ServerException();
     }
-    // return 2;
+  }
+
+  @override
+  Future updateInfoAboutParcel() async {
+    var client = http.Client();
+    for (int i = 0; i < controllerData.register.length; i++) {
+      final request = await client.post(
+          Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
+          headers: {'17token': '$key', 'Content-Type': 'application/json'},
+          body:
+              "[{'number': '${controllerData.register[i].accepted.first.number}', 'carrier': '${controllerData.register[i].accepted.first.carrier.toString()}'}]");
+      if (request.statusCode == 200) {
+        var decodedResponse =
+            jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
+        print(decodedResponse);
+        var ret = Data2.fromJson(decodedResponse['data']);
+        print('cool');
+
+        /// пробежатся по листу и убедится что данные перезаписываются
+
+        if (ret.accepted?.length == 0) {
+          print('0000000000000000000');
+        } else {
+          if (ret.accepted?.first?.track?.firstCarrierEvent?.length != 0 ||
+              ret.accepted?.first?.track?.secondCarrierEvent?.length != 0) {
+            if (controllerData.infoParcel.length ==
+                controllerData.register.length) {
+              for (int i = 0; i < controllerData.infoParcel.length; i++) {
+                print(1111);
+                print(controllerData.infoParcel[i].accepted.first.number);
+                print(ret.accepted?.first?.number);
+                print('ok');
+                if (controllerData.infoParcel[i].accepted.first.number ==
+                    ret.accepted?.first?.number) {
+                  print(controllerData.infoParcel.length);
+                  controllerData.infoParcel.removeAt(i);
+                  print(controllerData.infoParcel.length);
+                  controllerData.infoParcel.add(ret);
+                  print(controllerData.infoParcel.length);
+                  print('обновили');
+                  break;
+                }
+              }
+            } else {
+              for (int i = 0; i < controllerData.infoParcel.length; i++) {
+                print(1111);
+                print(controllerData.infoParcel[i].accepted.first.number);
+                print(ret.accepted?.first?.number);
+                print('ok');
+                if (controllerData.infoParcel[i].accepted.first.number ==
+                    ret.accepted?.first?.number) {
+                  print(controllerData.infoParcel.length);
+                  controllerData.infoParcel.removeAt(i);
+                  print(controllerData.infoParcel.length);
+                  controllerData.infoParcel.add(ret);
+                  print(controllerData.infoParcel.length);
+                  print('обновили');
+                  break;
+                }
+              }
+              for (int i = 0; i < controllerData.bed.length; i++) {
+                print(controllerData.bed[i].rejected.first.number);
+                print(ret.accepted?.first?.number);
+                print('ok');
+                if (controllerData.bed[i].rejected.first.number ==
+                    ret.accepted?.first?.number) {
+                  print(controllerData.infoParcel.length);
+                  controllerData.infoParcel.add(ret);
+                  controllerData.bed.removeAt(i);
+                  print(controllerData.infoParcel.length);
+                  print(controllerData.bed.length);
+                  print('oбновили');
+                  break;
+                }
+              }
+            }
+          }
+        }
+        print(ret);
+      } else {
+        print(request.statusCode);
+        print(request.body);
+        throw ServerException();
+      }
+    }
+    Get.snackbar('Tracker Parcel', 'Обновили');
   }
 }
 

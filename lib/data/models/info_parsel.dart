@@ -1,17 +1,18 @@
 class Data2 {
   List<Accepted?>? accepted;
 
-  //List<Rejected?>? rejected;
+  List<Rejected?>? rejected;
 
-  // Rejected rejected;
-  Data2({this.accepted});
+  Data2({this.accepted, this.rejected});
 
   factory Data2.fromJson(Map<String, dynamic> json) {
     return Data2(
       accepted: (json['accepted'] as List?)
           ?.map((item) => Accepted.fromJson(item))
           .toList(),
-      // rejected: Rejected.fromJson(json["rejected"]),
+      rejected: (json['rejected'] as List?)
+          ?.map((item) => Rejected.fromJson(item))
+          .toList(),
     );
   }
 }
@@ -28,6 +29,18 @@ class Accepted {
       track: Track.fromJson(
         json['track'],
       ),
+    );
+  }
+}
+
+class Rejected {
+  String? number;
+
+  Rejected({required this.number});
+
+  factory Rejected.fromJson(Map<String, dynamic> json) {
+    return Rejected(
+      number: json['number'],
     );
   }
 }

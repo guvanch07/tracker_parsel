@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/const/styless.dart';
-import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/data/datasources/data_source.dart';
 import 'package:tracker_pkg/parsel/parsel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
@@ -94,57 +93,12 @@ class _AddNumberState extends State<AddNumber> {
               PrimaryButton(
                   borderradius: 30.r,
                   onPressed: () {
-                    //Navigator.pop(context);
-                    // Get.snackbar('Well be', 'Данные сохранены',
-                    //     snackPosition: SnackPosition.TOP);
-                    // final snackBar = SnackBar(
-                    //   content: Text('Yay! A SnackBar!'),
-                    //   action: SnackBarAction(
-                    //     label: 'Undo',
-                    //     onPressed: () {},
-                    //   ),
-                    // );
-                    // Get.snackbar(
-                    //   'message',
-                    //   'message body',
-                    //   duration: Duration(seconds: 4),
-                    //   animationDuration: Duration(milliseconds: 800),
-                    //   snackPosition: SnackPosition.TOP,
-                    // );
-                    //ScaffoldMessenger.of(context).showSnackBar(Sneck);
-                    // print(infoParcel.length);
-                    // // print(infoParcel[0]
-                    // //     .accepted
-                    // //     ?.first
-                    // //     ?.track
-                    // //     ?.firstCarrierEvent?[0]
-                    // //     ?.eventTime);
-                    // //print(myController.text);
-                    //-18019909
                     if (myController.text.toString().length != 0) {
                       personService.registerParcel(myController.text);
                     } else {
+                      Get.snackbar('Tracker Parcel', 'Введите номер посылки');
                       print('Введите пожалуйста номер посылки');
-
-                      // Get.snackbar(
-                      //   "Подсказка",
-                      //   "Введите пожалуйста номер посылки",
-                      //   icon: Icon(Icons.person, color: Colors.white),
-                      //   snackPosition: SnackPosition.TOP,
-                      // );
-
-                      ///ShowSnackBar(введите пожалуста номер посылки)
                     }
-                    // // var ret = infoAboutParcel('11');
-                    // // print(ret);
-                    // //personService.registerParcel('11');
-                    // // print(myController.text);
-                    // // Navigator.push(
-                    // //     context,
-                    // //     MaterialPageRoute(
-                    // //       builder: (context) =>
-                    // //           Following(number: myController.text),
-                    // //     ));
                   },
                   text: '+   Добавить')
             ],
@@ -153,11 +107,6 @@ class _AddNumberState extends State<AddNumber> {
       ),
     );
   }
-
-  // get() async {
-  //   var ret = await infoAboutParcel('11');
-  //   return ret;
-  // }
 
 //
 // Widget textfield() {
