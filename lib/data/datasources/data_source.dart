@@ -18,7 +18,7 @@ String key = '7B81A74097D71028ED9E0BB949C37CD6';
 ///  +  z1 and z2 пусто
 ///  + обновить данные при нажатии на кнопку
 ///  + accepted пуст
-///
+/// + кто то добавил посылку в базу(не наш пользователь или наш пользователь(но он удалил приложение и поставил его заново))
 ///
 ///  обновлять данные при входе
 ///  обновлять данные при отведении в низ
@@ -28,7 +28,7 @@ String key = '7B81A74097D71028ED9E0BB949C37CD6';
 //           //       error: {code: -18019909, message: No tracking information at this time.}}]}})
 ///
 ///
-/// - кто то добавил посылку в базу(не наш пользователь или наш пользователь(но он удалил приложение и поставил его заново))
+///
 /// - отступы в самом номере(SB071    93  1150  LV)
 ///
 ///
@@ -58,23 +58,29 @@ class NetworkService {
         if (ret.rejected?.first.error?.code == -18019901) {
           print('номер уже был добавлен в базу');
           if (controllerData.register.isNotEmpty) {
+            int num = 0;
+            print(num);
             for (int i = 0; i < controllerData.register.length; i++) {
               print(1111);
               print(controllerData.register[i].accepted.first.number);
               print(ret.rejected?.first.number);
               print('ok');
-              if (controllerData.register[i].accepted.first.number ==
-                  ret.rejected?.first.number) {
+              if (controllerData.register[i].accepted.first.number
+                  .contains(ret.rejected?.first.number)) {
+                num = 1;
                 print(
                     'ваш номер был зарегистрирован в базе, информацию по нему можете посмотреть в ваших посылках)');
 
                 Get.snackbar('Tracker Parcel',
                     'ваш номер был зарегистрирован в базе,\информациюпо нему можете посмотреть в ваших посылках');
-                break;
               }
             }
+            if (num != 1) {
+              carrierIdentify(ret.rejected!.first.number.toString());
+              print('num !=1');
+            }
           } else {
-            // SnackBar(ваш номер был зарегистрирован в базе, инфы нет)
+            carrierIdentify(ret.rejected!.first.number.toString());
             print('этот номер есть в базе, но в листе его нет');
             print('register пуст');
           }
@@ -230,6 +236,38 @@ class NetworkService {
       }
     }
     Get.snackbar('Tracker Parcel', 'Обновили');
+  }
+
+  @override
+  Future<int> carrierIdentify(String number) async {
+    final response = await http.post(
+        Uri.parse('https://api.17track.net/track/v1/carrierIdentify'),
+        headers: {'17token': '$key', 'Content-Type': 'application/json'},
+        body: "[{'number': '$number'}]");
+    if (response.statusCode == 200) {
+      var decodedResponse =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      print(decodedResponse);
+      var ret = Data1.fromJson(decodedResponse['data']);
+      print('cool');
+      if (ret.accepted?.length != 0) {
+        controllerData.register.add(ret);
+        print(controllerData.register.length);
+        print(controllerData.register.last.accepted?.first?.number);
+        infoAboutParcel(controllerData.register.last.accepted?.first?.number,
+            controllerData.register.last.accepted?.first?.carrier);
+        print('no');
+        Get.snackbar('Tracker Parcel', 'Ваша посылка была успешно добавлена');
+      } else {
+        print('accepted.leangt == 0');
+      }
+    } else {
+      print(response.statusCode);
+      print('Erroor');
+      print(response.body);
+      throw ServerException();
+    }
+    return 1;
   }
 }
 

@@ -42,17 +42,13 @@ class Error {
 // "carrier": 12021
 //
 class Accepted {
-  int? origin;
   String? number;
   int? carrier;
 
-  Accepted({required this.origin, required this.number, required this.carrier});
+  Accepted({required this.number, required this.carrier});
 
   factory Accepted.fromJson(Map<String, dynamic> json) {
-    return Accepted(
-        origin: json['origin'],
-        number: json['number'],
-        carrier: json['carrier']);
+    return Accepted(number: json['number'], carrier: json['carrier']);
   }
 }
 
