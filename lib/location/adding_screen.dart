@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/data/datasources/data_source.dart';
-import 'package:tracker_pkg/parsel/parsel.dart';
+import 'package:tracker_pkg/location/following.dart';
+import 'package:tracker_pkg/parcel/parcel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -92,13 +94,39 @@ class _AddNumberState extends State<AddNumber> {
               SizedBox(height: 54.h),
               PrimaryButton(
                   borderradius: 30.r,
-                  onPressed: () {
-                    if (myController.text.toString().length != 0) {
-                      personService.registerParcel(myController.text);
-                    } else {
-                      Get.snackbar('Tracker Parcel', 'Введите номер посылки');
-                      print('Введите пожалуйста номер посылки');
-                    }
+                  onPressed: () async {
+                    await saveData();
+                    await loadData();
+                    // Get.snackbar('Tracker Parcel', 'Введите номер посылки',
+                    //     backgroundColor: Colors.red);
+                    // print('r');
+
+                    //print(DataSource().infoParcel.first);
+                    //
+                    // if (myController.text.toString().length != 0) {
+                    //   await personService.registerParcel(myController.text);
+                    //   print('rtydgd');
+                    //   try {
+                    //     print('bboobbob');
+                    //     print(controllerData.infoParcel.length);
+                    //     // print(DataSource().infoParcel.first);
+                    //     // print(DataSource().infoParcel.length - 1);
+                    //     //DataSource().infoParcel.last;
+                    //     //   Navigator.push(
+                    //     //     context,
+                    //     //     MaterialPageRoute(
+                    //     //       builder: (context) => Following(
+                    //     //         indexParcel: controllerData.infoParcel.length - 1,
+                    //     //       ),
+                    //     //     ),
+                    //     //   );
+                    //   } catch (e) {
+                    //     print('I TRY');
+                    //   }
+                    // } else {
+                    //   Get.snackbar('Tracker Parcel', 'Введите номер посылки');
+                    //   print('Введите пожалуйста номер посылки');
+                    // }
                   },
                   text: '+   Добавить')
             ],

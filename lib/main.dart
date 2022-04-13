@@ -13,6 +13,7 @@ import 'package:tracker_pkg/services/payments/purchse_api.dart';
 import 'auth/auth_google.dart';
 import 'auth/authgoogle.dart';
 import 'auth/wrapper.dart';
+import 'data/datasources/data.dart';
 import 'location/adding_screen.dart';
 import 'auth/registration.dart';
 import 'logic/barcode.dart';
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
 
           /// home: PaymentScreen(),
           home: TabScreen(),
+          //home: Shared(),
         ),
         designSize: const Size(414, 896),
       ),
