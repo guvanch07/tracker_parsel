@@ -2,38 +2,90 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker_pkg/const/color.dart';
+import 'package:tracker_pkg/data/models/info_parsel.dart';
 import 'package:tracker_pkg/data/models/register.dart';
 
 // class SharedPreferencesUtil {
 //
-loadData() async {
+// loadData(String key) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//
+//   String? json = prefs.getString(key);
+//   print("Loaded json $json");
+//   if (json == null) {
+//     print('No data in SharedPreferences');
+//   } else {
+//     Map<String, dynamic> map = jsonDecode(json);
+//     print('map $map');
+//     final user = Accepted.fromJson(map);
+//     print('User ${user.carrier},  ${user.number}');
+//   }
+// }
+
+loadData1(String key) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  String? json = prefs.getString('Test 2 MyUser_key');
+  String? json = prefs.getString(key);
   print("Loaded json $json");
   if (json == null) {
     print('No data in SharedPreferences');
   } else {
-    Map<String, dynamic> map = jsonDecode(json);
-    print('map $map');
-    final user = Accepted.fromJson(map);
-    print('User ${user.carrier},  ${user.number}');
+    //final List<dynamic> jsonData = jsonDecode(json);
+    List<FirstCarrierEvent> posts = List<FirstCarrierEvent>.from(
+        jsonDecode(json).map((model) => FirstCarrierEvent.fromJson(model)));
+    print(posts);
+    print(posts.length);
+    print(posts[0]);
+    print(posts[0].eventContent);
+
+    // final List<dynamic> jsonData = jsonDecode(json);
+    // var list = jsonData.map<List<FirstCarrierEvent>>((jsonList) {
+    //   return jsonList.map<FirstCarrierEvent>((jsonItem) {
+    //     return FirstCarrierEvent.fromJson(jsonItem);
+    //   }).toList();
+    // }).toList();
+    // print(list.length);
+    // print(list[0].first);
+
+    // Map<String, dynamic> map = jsonDecode(json);
+    // print('map $map');
+    // final user = FirstCarrierEvent.fromJson(map);
+    // print('User ${user.eventTime},  ${user.eventLocation}');
   }
 }
+//
+// saveData(String key, ret) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//
+//   // final test1Acepted = Accepted(
+//   //   carrier: ret.first.carrier,
+//   //   number: ret.first.number,
+//   // );
+//
+//   String json = jsonEncode(ret);
+//   print('Generated json ${json}');
+//   prefs.setString(key, json);
+//   //
+//   // List<String> jsonList = model.map((mod) => mod.toJson()).toList();
+//   // prefs.setStringList(key, jsonList);
+//   // print('Generated json ${jsonList}');
+//
+//   // prefs3.setStringList(json);
+// }
 
-saveData() async {
+saveData1(String key, List<FirstCarrierEvent?>? ret) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  // final test1Acepted = Accepted(
+  //   carrier: ret.first.carrier,
+  //   number: ret.first.number,
+  // );
 
-  final test1Acepted = Accepted(
-    carrier: 123456,
-    number: 'TestNumber1',
-  );
-
-  String json = jsonEncode(test1Acepted);
+  String json = jsonEncode(ret);
   print('Generated json ${json}');
-  prefs.setString('Test 2 MyUser_key', json);
+  prefs.setString(key, json);
   //
   // List<String> jsonList = model.map((mod) => mod.toJson()).toList();
   // prefs.setStringList(key, jsonList);
@@ -106,28 +158,28 @@ class DataSource extends GetxController {
 }
 
 //
-
-class User {
-  String? name;
-  String? email;
-  int? age;
-
-  User({this.name, this.age, this.email});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'email': email,
-      'age': age,
-    };
-  }
-
-  User.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    email = json['email'];
-    age = json['age'];
-  }
-}
+//
+// class User {
+//   String? name;
+//   String? email;
+//   int? age;
+//
+//   User({this.name, this.age, this.email});
+//
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'name': name,
+//       'email': email,
+//       'age': age,
+//     };
+//   }
+//
+//   User.fromJson(Map<String, dynamic> json) {
+//     name = json['name'];
+//     email = json['email'];
+//     age = json['age'];
+//   }
+// }
 //
 // class Shared extends StatelessWidget {
 //   const Shared({Key? key}) : super(key: key);

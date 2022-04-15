@@ -103,6 +103,9 @@ class NetworkService {
           Get.snackbar('Tracker Parcel', 'Номер некорректный');
         }
       } else {
+        // await saveData(
+        //     'register_${ret.accepted?.first.number}', ret.accepted?.single);
+        // await loadData('register_${ret.accepted?.first.number}');
         print(
             'посылка не была зарегистраирована ни этим понльзователем ни кем либо еще');
 
@@ -147,7 +150,9 @@ class NetworkService {
           jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
       print(decodedResponse);
       var ret = Data2.fromJson(decodedResponse['data']);
+
       print('cool');
+      //loadData('register_${ret.accepted?.first?.number}');
       if (ret.accepted?.length == 0) {
         print('ret.accepted?.length == 0');
         print('bed.length ==  ${controllerData.bed.length}');
@@ -161,6 +166,18 @@ class NetworkService {
         Get.snackbar('Tracker Parcel', 'No tracking information at this time.');
         print('0000000000000000000');
       } else {
+        // if (ret.accepted?.first?.track?.firstCarrierEvent?.length == 0) {
+        //   await saveData('info_${ret.accepted?.first?.number}',
+        //       ret.accepted?.first?.track?.secondCarrierEvent);
+        // } else {
+        //   await saveData('info_${ret.accepted?.first?.number}',
+        //       ret.accepted?.first?.track?.firstCarrierEvent);
+        // }
+        // await loadData('info_${ret.accepted?.first?.number}');
+        await saveData1('info_${ret.accepted?.first?.number}',
+            ret.accepted?.first?.track?.firstCarrierEvent);
+        await loadData1('info_${ret.accepted?.first?.number}');
+
         ///add (ontrollerData.infoParsel)
         controllerData.infoParcel.add(ret);
       }

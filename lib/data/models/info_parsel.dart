@@ -88,6 +88,14 @@ class FirstCarrierEvent {
         eventLocationExtension: json['d'],
         eventContent: json['z']);
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'a': eventTime,
+      'c': eventLocation,
+      'd': eventLocationExtension,
+      'z': eventContent,
+    };
+  }
 }
 
 class SecondCarrierEvent {
