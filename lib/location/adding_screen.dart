@@ -95,17 +95,11 @@ class _AddNumberState extends State<AddNumber> {
               PrimaryButton(
                   borderradius: 30.r,
                   onPressed: () async {
-                    // await saveData();
-                    // await loadData();
-                    // Get.snackbar('Tracker Parcel', 'Введите номер посылки',
-                    //     backgroundColor: Colors.red);
-                    // print('r');
-
-                    //print(DataSource().infoParcel.first);
-                    //
-
+                    /// add info (shared pref )
                     await NetworkService()
-                        .infoAboutParcel('SB071931150LV', 12021);
+                        .infoAboutParcel('LB013603058CN', 3011);
+
+                    /// not shared
                     // if (myController.text.toString().length != 0) {
                     //   await personService.registerParcel(myController.text);
                     //   print('rtydgd');
