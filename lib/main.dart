@@ -2,8 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/payment/profile_payment.dart';
@@ -12,6 +13,7 @@ import 'package:tracker_pkg/services/payments/purchse_api.dart';
 import 'auth/auth_google.dart';
 import 'auth/authgoogle.dart';
 import 'auth/wrapper.dart';
+import 'data/datasources/data.dart';
 import 'location/adding_screen.dart';
 import 'auth/registration.dart';
 import 'logic/barcode.dart';
@@ -36,6 +38,7 @@ import 'onboarding.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await PurchaseApi.init();
+  await GetStorage.init('MyStorage');
   await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -67,14 +70,16 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: ScreenUtilInit(
-        builder: () => MaterialApp(
+        builder: (context) => GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: PaymentScreen(),
-          //home: TabScreen(),
+
+          /// home: PaymentScreen(),
+          home: TabScreen(),
+          //home: Shared(),
         ),
         designSize: const Size(414, 896),
       ),

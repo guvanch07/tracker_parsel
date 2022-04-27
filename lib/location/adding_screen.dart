@@ -1,22 +1,19 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tracker_pkg/const/color.dart';
-
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/data/datasources/data_source.dart';
-import 'package:tracker_pkg/parsel/parsel.dart';
+import 'package:tracker_pkg/location/following.dart';
+import 'package:tracker_pkg/parcel/parcel.dart';
 import 'package:tracker_pkg/profile/profile.dart';
 import 'package:tracker_pkg/widget/button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../logic/barcode.dart';
-import 'following.dart';
 
 class AddNumber extends StatefulWidget {
   const AddNumber({Key? key}) : super(key: key);
@@ -30,6 +27,7 @@ class _AddNumberState extends State<AddNumber> {
 
   @override
   Widget build(BuildContext context) {
+    final NetworkService personService = NetworkService();
     return Scaffold(
       backgroundColor: kbgc,
       appBar: AppBar(
@@ -89,6 +87,7 @@ class _AddNumberState extends State<AddNumber> {
                     hintText: '  ${context.watch<LogicBarCode>().scanValue}',
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
+                      //SB071931150LV
                     ),
                   ),
                 ),
@@ -96,14 +95,39 @@ class _AddNumberState extends State<AddNumber> {
               SizedBox(height: 54.h),
               PrimaryButton(
                   borderradius: 30.r,
-                  onPressed: () {
-                    //registerParcel('11');
-                    infoAboutParcel('11');
-                    // print(myController.text);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => Following()),
-                    // );
+                  onPressed: () async {
+                    /// add info (shared pref )
+                    // final box = GetStorage('MyStorage');
+                    // box.remove('numbers');
+                    // box.remove('carrier');
+                    await NetworkService()
+                        .infoAboutParcel(number: 'LB013603058CN', carrier: 3011);
+
+                    /// not shared
+                    // if (myController.text.toString().length != 0) {
+                    //   await personService.registerParcel(myController.text);
+                    //   print('rtydgd');
+                    //   try {
+                    //     print('bboobbob');
+                    //     print(controllerData.infoParcel.length);
+                    //     // print(DataSource().infoParcel.first);
+                    //     // print(DataSource().infoParcel.length - 1);
+                    //     //DataSource().infoParcel.last;
+                    //     //   Navigator.push(
+                    //     //     context,
+                    //     //     MaterialPageRoute(
+                    //     //       builder: (context) => Following(
+                    //     //         indexParcel: controllerData.infoParcel.length - 1,
+                    //     //       ),
+                    //     //     ),
+                    //     //   );
+                    //   } catch (e) {
+                    //     print('I TRY');
+                    //   }
+                    // } else {
+                    //   Get.snackbar('Tracker Parcel', 'Введите номер посылки');
+                    //   print('Введите пожалуйста номер посылки');
+                    // }
                   },
                   text: '+   Добавить')
             ],
@@ -113,28 +137,28 @@ class _AddNumberState extends State<AddNumber> {
     );
   }
 
-  //
-  // Widget textfield() {
-  //
-  //   return Container(
-  //     height: 50,
-  //     decoration: BoxDecoration(
-  //         color: Colors.white, borderRadius: BorderRadius.circular(45)),
-  //     margin: EdgeInsets.symmetric(horizontal: 20),
-  //     child: TextField(
-  //       controller: myController,
-  //       cursorColor: kTextColor,
-  //       style: kText22,
-  //       decoration: InputDecoration(
-  //         hintStyle: kText14,
-  //         hintText: '  ${context.watch<LogicBarCode>().scanValue}',
-  //         border: OutlineInputBorder(
-  //           borderSide: BorderSide.none,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+//
+// Widget textfield() {
+//
+//   return Container(
+//     height: 50,
+//     decoration: BoxDecoration(
+//         color: Colors.white, borderRadius: BorderRadius.circular(45)),
+//     margin: EdgeInsets.symmetric(horizontal: 20),
+//     child: TextField(
+//       controller: myController,
+//       cursorColor: kTextColor,
+//       style: kText22,
+//       decoration: InputDecoration(
+//         hintStyle: kText14,
+//         hintText: '  ${context.watch<LogicBarCode>().scanValue}',
+//         border: OutlineInputBorder(
+//           borderSide: BorderSide.none,
+//         ),
+//       ),
+//     ),
+//   );
+// }
 }
 
 class TabScreen extends StatefulWidget {
