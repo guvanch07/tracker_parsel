@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/const/styless.dart';
@@ -96,8 +97,11 @@ class _AddNumberState extends State<AddNumber> {
                   borderradius: 30.r,
                   onPressed: () async {
                     /// add info (shared pref )
+                    // final box = GetStorage('MyStorage');
+                    // box.remove('numbers');
+                    // box.remove('carrier');
                     // await NetworkService()
-                    //     .infoAboutParcel('LB013603058CN', 3011);
+                    //     .infoAboutParcel(number: 'LB013603058CN', carrier: 3011);
 
                     /// not shared
                     if (myController.text.toString().length != 0) {
@@ -106,7 +110,9 @@ class _AddNumberState extends State<AddNumber> {
                       try {
                         print('bboobbob');
                         print(controllerData.infoParcel.length);
-
+                        // print(DataSource().infoParcel.first);
+                        // print(DataSource().infoParcel.length - 1);
+                        //DataSource().infoParcel.last;
                         //   Navigator.push(
                         //     context,
                         //     MaterialPageRoute(
