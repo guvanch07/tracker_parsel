@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
 import 'package:tracker_pkg/auth/authgoogle.dart';
 import 'package:tracker_pkg/const/color.dart';
 import 'package:tracker_pkg/const/styless.dart';
+import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/data/datasources/data_source.dart';
 import 'package:tracker_pkg/location/adding_screen.dart';
 import 'package:tracker_pkg/location/following.dart';
@@ -13,6 +16,8 @@ import 'package:tracker_pkg/parcel/parcel_widget.dart';
 import 'package:tracker_pkg/widget/dropdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tracker_pkg/widget/refresh_widget.dart';
+
+import '../data/models/info_parsel.dart';
 
 int tr = 2;
 var time = '${DateTime.now().hour}:${DateTime.now().minute}';
@@ -55,11 +60,11 @@ class _ParselScreenState extends State<ParselScreen> {
 
   Future<void> _refresh() async {
     try {
-      await NetworkService().updateInfoAboutParcel();
-      time = '${DateTime.now().hour}:${DateTime.now().minute}';
-      setState(() {
-        controllerData.infoParcel.length;
-      });
+      // await NetworkService().updateInfoAboutParcel();
+      // time = '${DateTime.now().hour}:${DateTime.now().minute}';
+      // setState(() {
+      //   controllerData.infoParcel.length;
+      // });
     } catch (e) {
       print('i try');
     }
@@ -77,6 +82,10 @@ class _ParselScreenState extends State<ParselScreen> {
 
   @override
   Widget build(BuildContext context) {
+    GetStorage box = GetStorage('MyStorage');
+
+    List? lis = box.read('parcels');
+
     final authService = Provider.of<AuthService>(context);
     final provider = Provider.of<GoogleSingInPro>(context, listen: false);
     // var time = '${DateTime.now().hour}:${DateTime.now().minute}';
@@ -133,55 +142,71 @@ class _ParselScreenState extends State<ParselScreen> {
                   child: RefreshWidget(
                     //triggerMode: RefreshIndicatorTriggerMode.onEdge,
                     onRefresh: _refresh,
-                    child: ListView.builder(
-                      controller: _controller,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      // scrollDirection: Axis.vertical,
-                      shrinkWrap: false,
-                      primary: true,
-                      itemCount: controllerData.infoParcel.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        det() {
-                          if (controllerData.infoParcel[index].accepted.first
-                                  .track.secondCarrierEvent.length ==
-                              0) {
-                            return 1;
-                          } else {
-                            return 2;
-                          }
-                        }
+                    child: lis.isNull
+                        ? Text('empty')
+                        : ListView.builder(
+                            controller: _controller,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            // scrollDirection: Axis.vertical,
+                            shrinkWrap: false,
+                            primary: true,
+                            itemCount: lis?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              det() {
+                                if (lis![index]
+                                        ?.accepted
+                                        ?.first
+                                        ?.track
+                                        ?.secondCarrierEvent
+                                        ?.length ==
+                                    0) {
+                                  return 1;
+                                } else {
+                                  return 2;
+                                }
+                              }
 
-                        var current =
-                            controllerData.infoParcel[index].accepted?.first;
-                        DateTime tempData = DateTime.parse(det() == 1
-                            ? current.track.firstCarrierEvent[0].eventTime
-                            : current.track.secondCarrierEvent[0].eventTime);
+                              var current = lis![index]?.accepted!.first;
+                              // if (det() == 1){
+                              //   DateTime tempData = DateTime.parse(current!.track!.firstCarrierEvent![0]!.eventTime);
+                              // }
+                              DateTime tempData = DateTime.parse(det() == 1
+                                  ? current
+                                      ?.track?.firstCarrierEvent![0]?.eventTime
+                                  : current?.track?.secondCarrierEvent![0]
+                                      ?.eventTime);
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Following(
-                                  indexParcel: index,
-                                ),
-                              ),
-                            );
-                          },
-                          child: ParselWidget(
-                            text: current.number,
-                            time:
-                                '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
-                            upgrade: time.toString(),
-                            where: det() == 1
-                                ? current
-                                    .track.firstCarrierEvent[0].eventContent
-                                : current
-                                    .track.secondCarrierEvent[0].eventContent,
+                              return lis.length == 0
+                                  ? Container()
+                                  : GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Following(
+                                              indexParcel: index,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: ParselWidget(
+                                        text: current?.number,
+                                        time:
+                                            '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                                        upgrade: time.toString(),
+                                        where: det() == 1
+                                            ? current!
+                                                .track
+                                                ?.firstCarrierEvent![0]
+                                                ?.eventContent
+                                            : current!
+                                                .track
+                                                ?.secondCarrierEvent![0]
+                                                ?.eventContent,
+                                      ),
+                                    );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ),
                 SizedBox(

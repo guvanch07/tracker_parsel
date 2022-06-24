@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracker_pkg/data/datasources/data.dart';
 import 'package:tracker_pkg/data/models/info_parsel.dart';
@@ -121,6 +122,10 @@ class NetworkService {
         controllerData.register.add(ret);
         print(controllerData.register.length);
         print(controllerData.register.last.accepted?.first?.number);
+        print('savedata1');
+        await saveData1(controllerData.register.last.accepted?.first?.number,
+            controllerData.register.last.accepted?.first?.carrier);
+        print('savedata1');
 
         ///loadData (ontrollerData.register)
         await infoAboutParcel(
@@ -166,17 +171,7 @@ class NetworkService {
         Get.snackbar('Tracker Parcel', 'No tracking information at this time.');
         print('0000000000000000000');
       } else {
-        // if (ret.accepted?.first?.track?.firstCarrierEvent?.length == 0) {
-        //   await saveData('info_${ret.accepted?.first?.number}',
-        //       ret.accepted?.first?.track?.secondCarrierEvent);
-        // } else {
-        //   await saveData('info_${ret.accepted?.first?.number}',
-        //       ret.accepted?.first?.track?.firstCarrierEvent);
-        // }
-        // await loadData('info_${ret.accepted?.first?.number}');
-        await saveData1('info_${ret.accepted?.first?.number}',
-            ret.accepted?.first?.track?.firstCarrierEvent);
-        await loadData1('info_${ret.accepted?.first?.number}');
+        await saveData2(ret);
 
         ///add (ontrollerData.infoParsel)
         controllerData.infoParcel.add(ret);

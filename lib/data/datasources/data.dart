@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker_pkg/const/color.dart';
@@ -25,37 +26,37 @@ import 'package:tracker_pkg/data/models/register.dart';
 //   }
 // }
 
-loadData1(String key) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  String? json = prefs.getString(key);
-  print("Loaded json $json");
-  if (json == null) {
-    print('No data in SharedPreferences');
-  } else {
-    //final List<dynamic> jsonData = jsonDecode(json);
-    List<FirstCarrierEvent> posts = List<FirstCarrierEvent>.from(
-        jsonDecode(json).map((model) => FirstCarrierEvent.fromJson(model)));
-    print(posts);
-    print(posts.length);
-    print(posts[0]);
-    print(posts[0].eventContent);
-
-    // final List<dynamic> jsonData = jsonDecode(json);
-    // var list = jsonData.map<List<FirstCarrierEvent>>((jsonList) {
-    //   return jsonList.map<FirstCarrierEvent>((jsonItem) {
-    //     return FirstCarrierEvent.fromJson(jsonItem);
-    //   }).toList();
-    // }).toList();
-    // print(list.length);
-    // print(list[0].first);
-
-    // Map<String, dynamic> map = jsonDecode(json);
-    // print('map $map');
-    // final user = FirstCarrierEvent.fromJson(map);
-    // print('User ${user.eventTime},  ${user.eventLocation}');
-  }
-}
+// loadData1(String key) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//
+//   String? json = prefs.getString(key);
+//   print("Loaded json $json");
+//   if (json == null) {
+//     print('No data in SharedPreferences');
+//   } else {
+//     //final List<dynamic> jsonData = jsonDecode(json);
+//     List<FirstCarrierEvent> posts = List<FirstCarrierEvent>.from(
+//         jsonDecode(json).map((model) => FirstCarrierEvent.fromJson(model)));
+//     print(posts);
+//     print(posts.length);
+//     print(posts[0]);
+//     print(posts[0].eventContent);
+//
+//     // final List<dynamic> jsonData = jsonDecode(json);
+//     // var list = jsonData.map<List<FirstCarrierEvent>>((jsonList) {
+//     //   return jsonList.map<FirstCarrierEvent>((jsonItem) {
+//     //     return FirstCarrierEvent.fromJson(jsonItem);
+//     //   }).toList();
+//     // }).toList();
+//     // print(list.length);
+//     // print(list[0].first);
+//
+//     // Map<String, dynamic> map = jsonDecode(json);
+//     // print('map $map');
+//     // final user = FirstCarrierEvent.fromJson(map);
+//     // print('User ${user.eventTime},  ${user.eventLocation}');
+//   }
+// }
 //
 // saveData(String key, ret) async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,24 +76,75 @@ loadData1(String key) async {
 //
 //   // prefs3.setStringList(json);
 // }
+//
+saveData1(String parselNumber, int parselCarrier) async {
+  final box = GetStorage('MyStorage');
+  var listOfNumbers = [];
+  var listOfCarriers = [];
+  box.writeIfNull('numbers', listOfNumbers);
+  box.writeIfNull('carrier', listOfCarriers);
 
-saveData1(String key, List<FirstCarrierEvent?>? ret) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  // final test1Acepted = Accepted(
-  //   carrier: ret.first.carrier,
-  //   number: ret.first.number,
-  // );
-
-  String json = jsonEncode(ret);
-  print('Generated json ${json}');
-  prefs.setString(key, json);
-  //
-  // List<String> jsonList = model.map((mod) => mod.toJson()).toList();
-  // prefs.setStringList(key, jsonList);
-  // print('Generated json ${jsonList}');
-
-  // prefs3.setStringList(json);
+  listOfNumbers = box.read('numbers');
+  listOfCarriers = box.read('carrier');
+  listOfNumbers.add(parselNumber);
+  listOfCarriers.add(parselCarrier);
+  print('data saved');
+  print(parselNumber);
+  print(parselCarrier);
+  print(listOfNumbers);
+  print(listOfCarriers);
+  // print('Generated json ${json}');
+  box.write('numbers', listOfNumbers);
+  box.write('carriers', listOfCarriers);
+  print('write -------------------------------Save DAta1');
 }
+
+saveData2(Data2 data2) async {
+  final box = GetStorage('MyStorage');
+  List<Data2> listOfParcel = [];
+
+  box.writeIfNull('parcels', listOfParcel);
+  listOfParcel = box.read('parcels');
+  listOfParcel.add(data2);
+  print('data saved');
+  print(data2);
+  print(listOfParcel);
+  box.write('parcels', listOfParcel);
+  print('write -------------------------------Save DAta2');
+}
+
+loadData() async {
+  final box = GetStorage('MyStorage');
+
+  //final controllerData = Get.find<DataSource>();
+
+  List? json = await box.read('parcels');
+  if (json == null) {
+    print('No data in SharedPreferences');
+  } else {
+    return json;
+    // Map<String, dynamic> decodedResponse = jsonDecode(json);
+    // var ret = Data2.fromJson(decodedResponse['data']);
+    // controllerData.infoParcel.add(ret);
+  }
+}
+// saveData1(String key, List<FirstCarrierEvent?>? ret) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   // final test1Acepted = Accepted(
+//   //   carrier: ret.first.carrier,
+//   //   number: ret.first.number,
+//   // );
+//
+//   String json = jsonEncode(ret);
+//   print('Generated json ${json}');
+//   prefs.setString(key, json);
+//   //
+//   // List<String> jsonList = model.map((mod) => mod.toJson()).toList();
+//   // prefs.setStringList(key, jsonList);
+//   // print('Generated json ${jsonList}');
+//
+//   // prefs3.setStringList(json);
+// }
 
 // clearData() async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -147,12 +199,14 @@ class DataSource extends GetxController {
   List infoParcel = [];
   List register = [];
   List bed = [];
+  GetStorage box = GetStorage('MyStorage');
 
   @override
   void onInit() {
     infoParcel;
     register;
     bed;
+    //loadData();
     super.onInit();
   }
 }

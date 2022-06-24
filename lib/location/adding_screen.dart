@@ -96,34 +96,32 @@ class _AddNumberState extends State<AddNumber> {
                   borderradius: 30.r,
                   onPressed: () async {
                     /// add info (shared pref )
-                    await NetworkService()
-                        .infoAboutParcel('LB013603058CN', 3011);
+                    // await NetworkService()
+                    //     .infoAboutParcel('LB013603058CN', 3011);
 
                     /// not shared
-                    // if (myController.text.toString().length != 0) {
-                    //   await personService.registerParcel(myController.text);
-                    //   print('rtydgd');
-                    //   try {
-                    //     print('bboobbob');
-                    //     print(controllerData.infoParcel.length);
-                    //     // print(DataSource().infoParcel.first);
-                    //     // print(DataSource().infoParcel.length - 1);
-                    //     //DataSource().infoParcel.last;
-                    //     //   Navigator.push(
-                    //     //     context,
-                    //     //     MaterialPageRoute(
-                    //     //       builder: (context) => Following(
-                    //     //         indexParcel: controllerData.infoParcel.length - 1,
-                    //     //       ),
-                    //     //     ),
-                    //     //   );
-                    //   } catch (e) {
-                    //     print('I TRY');
-                    //   }
-                    // } else {
-                    //   Get.snackbar('Tracker Parcel', 'Введите номер посылки');
-                    //   print('Введите пожалуйста номер посылки');
-                    // }
+                    if (myController.text.toString().length != 0) {
+                      await personService.registerParcel(myController.text);
+                      print('rtydgd');
+                      try {
+                        print('bboobbob');
+                        print(controllerData.infoParcel.length);
+
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => Following(
+                        //         indexParcel: controllerData.infoParcel.length - 1,
+                        //       ),
+                        //     ),
+                        //   );
+                      } catch (e) {
+                        print('I TRY');
+                      }
+                    } else {
+                      Get.snackbar('Tracker Parcel', 'Введите номер посылки');
+                      print('Введите пожалуйста номер посылки');
+                    }
                   },
                   text: '+   Добавить')
             ],

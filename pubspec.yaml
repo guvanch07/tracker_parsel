@@ -46,6 +46,7 @@ dependencies:
   get: ^4.6.1
   firebase_messaging_platform_interface: 3.1.6
   shared_preferences: ^2.0.13
+  get_storage: ^2.0.3
 
   json_serializable: ^6.1.5
   json_annotation: ^4.4.0
