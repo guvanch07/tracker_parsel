@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: ScreenUtilInit(
-        builder: (context) => GetMaterialApp(
+        builder: () => GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
