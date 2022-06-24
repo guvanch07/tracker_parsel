@@ -25,47 +25,46 @@ import 'package:tracker_pkg/data/models/register.dart';
 //     print('User ${user.carrier},  ${user.number}');
 //   }
 // }
-//
-// loadData1(String key) async {
-//   final box = GetStorage('MyStorage');
-//   //SharedPreferences prefs = await SharedPreferences.getInstance();
-//   final controllerData = Get.find<DataSource>();
-//
-//   String json = box.read(key);
-//   //int? requestBytes = box.read('bytes');
-//   //print("Loaded json $json");
-//   if (json == null) {
-//     print('No data in SharedPreferences');
-//   } else {
-//     // var decodedResponse =
-//     // jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
-//     print(json);
-//     Map<String, dynamic> decodedResponse =
-//     jsonDecode(json);
-//     var ret = Data2.fromJson(decodedResponse['data']);
-//     controllerData.infoParcel.add(ret);
-//     // List<FirstCarrierEvent> posts = List<FirstCarrierEvent>.from(
-//     //     jsonDecode(json).map((model) => FirstCarrierEvent.fromJson(model)));
-//     // print(posts);
-//     // print(posts.length);
-//     // print(posts[0]);
-//     // print(posts[0].eventContent);
-//
-//     // final List<dynamic> jsonData = jsonDecode(json);
-//     // var list = jsonData.map<List<FirstCarrierEvent>>((jsonList) {
-//     //   return jsonList.map<FirstCarrierEvent>((jsonItem) {
-//     //     return FirstCarrierEvent.fromJson(jsonItem);
-//     //   }).toList();
-//     // }).toList();
-//     // print(list.length);
-//     // print(list[0].first);
-//
-//     // Map<String, dynamic> map = jsonDecode(json);
-//     // print('map $map');
-//     // final user = FirstCarrierEvent.fromJson(map);
-//     // print('User ${user.eventTime},  ${user.eventLocation}');
-//   }
-// }
+
+loadData1(String key) async {
+  final box = GetStorage('MyStorage');
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+  final controllerData = Get.find<DataSource>();
+
+  String json = box.read(key);
+  //int? requestBytes = box.read('bytes');
+  //print("Loaded json $json");
+  if (json == null) {
+    print('No data in SharedPreferences');
+  } else {
+    // var decodedResponse =
+    // jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
+    print(json);
+    Map<String, dynamic> decodedResponse = jsonDecode(json);
+    var ret = Data2.fromJson(decodedResponse['data']);
+    controllerData.infoParcel.add(ret);
+    // List<FirstCarrierEvent> posts = List<FirstCarrierEvent>.from(
+    //     jsonDecode(json).map((model) => FirstCarrierEvent.fromJson(model)));
+    // print(posts);
+    // print(posts.length);
+    // print(posts[0]);
+    // print(posts[0].eventContent);
+
+    // final List<dynamic> jsonData = jsonDecode(json);
+    // var list = jsonData.map<List<FirstCarrierEvent>>((jsonList) {
+    //   return jsonList.map<FirstCarrierEvent>((jsonItem) {
+    //     return FirstCarrierEvent.fromJson(jsonItem);
+    //   }).toList();
+    // }).toList();
+    // print(list.length);
+    // print(list[0].first);
+
+    // Map<String, dynamic> map = jsonDecode(json);
+    // print('map $map');
+    // final user = FirstCarrierEvent.fromJson(map);
+    // print('User ${user.eventTime},  ${user.eventLocation}');
+  }
+}
 //
 // saveData(String key, ret) async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();

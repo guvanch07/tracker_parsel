@@ -51,7 +51,8 @@ class Following extends StatelessWidget {
       return controllerData
               .infoParcel[indexParcel].accepted.first.track.firstCarrierEvent
               .toList()
-              .length - 1;
+              .length -
+          1;
     } else {
       return controllerData
               .infoParcel[indexParcel].accepted.first.track.secondCarrierEvent

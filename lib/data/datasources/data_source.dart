@@ -30,7 +30,6 @@ String key = '8EA3FE3E4450D6A26139B580C11DCB26';
 /// 20  + 10 (with following.dart, parcel )- request
 ///  7  - add
 ///  3 - remove
-
 final controllerData = Get.put(DataSource());
 
 class NetworkService {
@@ -145,77 +144,41 @@ class NetworkService {
     var client = http.Client();
     var response;
     if ((number == null && carrier == null) || number == null) {
-      print('no number carrieer');
       List listOfNumbers = box.read('numbers');
       List listOfCarriers = box.read('carrier');
-      if (listOfNumbers.isNotEmpty) {
-        for (int i = 0; i < listOfNumbers.length; i++) {
-          response = await client.post(
-              Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
-              headers: {'17token': '$key', 'Content-Type': 'application/json'},
-              body:
-                  "[{'number': '${listOfNumbers[i]}', 'carrier': '${listOfCarriers[i].toString()}'}]");
-          if (response.statusCode == 200) {
-            var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes))
-                as Map<String, dynamic>;
-            var ret = Data2.fromJson(decodedResponse['data']);
-            //loadData('register_${ret.accepted?.first?.number}');
-            if (ret.accepted?.length == 0) {
-              controllerData.bed.add(ret);
-              // SB071931150LV  12021
-              // LB013603058CN  3011
-              // LV336687519CN  3011
-              Get.snackbar(
-                  'Tracker Parcel', 'No tracking information at this time.');
-              return 'error';
-            } else {
-              //await loadData1('info');
-              if (controllerData.infoParcel.isNotEmpty) {
-                print('not Empty');
-                for (int r = 0; r < controllerData.infoParcel.length; r++) {
-                  if (controllerData.infoParcel[r].accepted.first.number ==
-                      ret.accepted?.first?.number) {
-                    print(controllerData.infoParcel.length);
-
-                    ///remove (ontrollerData.infoParcel)
-                    controllerData.infoParcel.removeAt(r);
-                    print(controllerData.infoParcel.length);
-
-                    ///add (ontrollerData.infoParcel)
-                    controllerData.infoParcel.add(ret);
-                    print(controllerData.infoParcel.length);
-                    print('обновили');
-
-                    //
-                    print('ppppppppppppppppppppppppppppppppppppppppppppp');
-                  } else {
-                    controllerData.infoParcel.add(ret);
-                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                  }
-                }
-              } else {
-                print('was empry');
-                controllerData.infoParcel.add(ret);
-              }
-              return 'has data';
-              //     controllerData.infoParcel.accepted.first.number ==
-              //     ret.accepted?.first?.number
-              //       print('ppppppppppppppppppppppppppppppppppppppppppppp');
-              //     } else {
-              //   controllerData.infoParcel.add(ret);
-              // })
-
-            }
-          } else {
-            print(response.statusCode);
-            print(response.body);
-            //throw ServerException();
+      for (int i = 0; i < listOfNumbers.length; i++) {
+        response = await client.post(
+            Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
+            headers: {'17token': '$key', 'Content-Type': 'application/json'},
+            body:
+                "[{'number': '${listOfNumbers[i]}', 'carrier': '${listOfCarriers[i].toString()}'}]");
+        if (response.statusCode == 200) {
+          var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes))
+              as Map<String, dynamic>;
+          var ret = Data2.fromJson(decodedResponse['data']);
+          //loadData('register_${ret.accepted?.first?.number}');
+          if (ret.accepted?.length == 0) {
+            controllerData.bed.add(ret);
+            // SB071931150LV  12021
+            // LB013603058CN  3011
+            // LV336687519CN  3011
+            Get.snackbar(
+                'Tracker Parcel', 'No tracking information at this time.');
             return 'error';
+          } else {
+            //await loadData1('info');
+
+            controllerData.infoParcel.add(ret);
+            return 'hes data';
           }
+        } else {
+          print(response.statusCode);
+          print(response.body);
+          //throw ServerException();
+          return 'error';
         }
       }
     } else {
-      print('has number carrieer');
       response = await client.post(
           Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
           headers: {'17token': '$key', 'Content-Type': 'application/json'},
@@ -240,41 +203,8 @@ class NetworkService {
         } else {
           await saveData1(number, carrier!);
           //await loadData1('info');
-          print('save 21111');
-
-          if (controllerData.infoParcel.isNotEmpty) {
-            print('not Empty');
-            for (int r = 0; r < controllerData.infoParcel.length; r++) {
-              if (controllerData.infoParcel[r].accepted.first.number ==
-                  ret.accepted?.first?.number) {
-                print(controllerData.infoParcel.length);
-
-                ///remove (ontrollerData.infoParcel)
-                controllerData.infoParcel.removeAt(r);
-                print(controllerData.infoParcel.length);
-
-                ///add (ontrollerData.infoParcel)
-                controllerData.infoParcel.add(ret);
-                print(controllerData.infoParcel.length);
-                print('обновили');
-
-                //
-                print('ppppppppppppppppppppppppppppppppppppppppppppp');
-              }
-            }
-          } else {
-            print('was empry');
-            controllerData.infoParcel.add(ret);
-          }
+          controllerData.infoParcel.add(ret);
           return 'has data';
-
-          //
-          // if (controllerData.infoParcel.contains(ret)) {
-          //   print('no pppppppppppppppppppppp');
-          // } else {
-          //   controllerData.infoParcel.add(ret);
-          // }
-
         }
       } else {
         print(response.statusCode);
@@ -285,116 +215,115 @@ class NetworkService {
     }
   }
 
-  //
-  // @override
-  // Future updateInfoAboutParcel() async {
-  //   var client = http.Client();
-  //
-  //   ///loadData (ontrollerData.register)
-  //   for (int i = 0; i < controllerData.register.length; i++) {
-  //     final request = await client.post(
-  //         Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
-  //         headers: {'17token': '$key', 'Content-Type': 'application/json'},
-  //
-  //         ///loadData (ontrollerData.register)
-  //         body:
-  //             "[{'number': '${controllerData.register[i].accepted.first.number}', 'carrier': '${controllerData.register[i].accepted.first.carrier.toString()}'}]");
-  //     if (request.statusCode == 200) {
-  //       var decodedResponse =
-  //           jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
-  //       print(decodedResponse);
-  //       var ret = Data2.fromJson(decodedResponse['data']);
-  //       print('cool');
-  //       if (ret.accepted?.length == 0) {
-  //         print('0000000000000000000');
-  //       } else {
-  //         if (ret.accepted?.first?.track?.firstCarrierEvent?.length != 0 ||
-  //             ret.accepted?.first?.track?.secondCarrierEvent?.length != 0) {
-  //           ///loadData (ontrollerData.infoParcel)
-  //           if (controllerData.infoParcel.length ==
-  //               controllerData.register.length) {
-  //             ///loadData (ontrollerData.infoParcel)
-  //             for (int i = 0; i < controllerData.infoParcel.length; i++) {
-  //               print(1111);
-  //               print(controllerData.infoParcel[i].accepted.first.number);
-  //               print(ret.accepted?.first?.number);
-  //               print('ok');
-  //
-  //               ///loadData (ontrollerData.infoParcel)
-  //               if (controllerData.infoParcel[i].accepted.first.number ==
-  //                   ret.accepted?.first?.number) {
-  //                 print(controllerData.infoParcel.length);
-  //
-  //                 ///remove (ontrollerData.infoParcel)
-  //                 controllerData.infoParcel.removeAt(i);
-  //                 print(controllerData.infoParcel.length);
-  //
-  //                 ///add (ontrollerData.infoParcel)
-  //                 controllerData.infoParcel.add(ret);
-  //                 print(controllerData.infoParcel.length);
-  //                 print('обновили');
-  //                 break;
-  //               }
-  //             }
-  //           } else {
-  //             ///loadData (ontrollerData.infoParcel)
-  //             for (int i = 0; i < controllerData.infoParcel.length; i++) {
-  //               print(1111);
-  //               print(controllerData.infoParcel[i].accepted.first.number);
-  //               print(ret.accepted?.first?.number);
-  //               print('ok');
-  //
-  //               ///loadData (ontrollerData.infoParcel)
-  //               if (controllerData.infoParcel[i].accepted.first.number ==
-  //                   ret.accepted?.first?.number) {
-  //                 print(controllerData.infoParcel.length);
-  //
-  //                 ///remove (ontrollerData.infoParcel)
-  //                 controllerData.infoParcel.removeAt(i);
-  //                 print(controllerData.infoParcel.length);
-  //
-  //                 ///add (ontrollerData.infoParcel)
-  //                 controllerData.infoParcel.add(ret);
-  //                 print(controllerData.infoParcel.length);
-  //                 print('обновили');
-  //                 break;
-  //               }
-  //             }
-  //
-  //             ///loadData (ontrollerData.bed)
-  //             for (int i = 0; i < controllerData.bed.length; i++) {
-  //               print(controllerData.bed[i].rejected.first.number);
-  //               print(ret.accepted?.first?.number);
-  //               print('ok');
-  //
-  //               ///loadData (ontrollerData.bed)
-  //               if (controllerData.bed[i].rejected.first.number ==
-  //                   ret.accepted?.first?.number) {
-  //                 print(controllerData.infoParcel.length);
-  //
-  //                 /// add (ontrollerData.infoParcel)
-  //                 controllerData.infoParcel.add(ret);
-  //
-  //                 /// remove (ontrollerData.bed)
-  //                 controllerData.bed.removeAt(i);
-  //                 print(controllerData.infoParcel.length);
-  //                 print(controllerData.bed.length);
-  //                 print('oбновили');
-  //                 break;
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //       print(ret);
-  //     } else {
-  //       print(request.statusCode);
-  //       print(request.body);
-  //       throw ServerException();
-  //     }
-  //   }
-  //   Get.snackbar('Tracker Parcel', 'Обновили');
-  // }
+  @override
+  Future updateInfoAboutParcel() async {
+    var client = http.Client();
+
+    ///loadData (ontrollerData.register)
+    for (int i = 0; i < controllerData.register.length; i++) {
+      final request = await client.post(
+          Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
+          headers: {'17token': '$key', 'Content-Type': 'application/json'},
+
+          ///loadData (ontrollerData.register)
+          body:
+              "[{'number': '${controllerData.register[i].accepted.first.number}', 'carrier': '${controllerData.register[i].accepted.first.carrier.toString()}'}]");
+      if (request.statusCode == 200) {
+        var decodedResponse =
+            jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
+        print(decodedResponse);
+        var ret = Data2.fromJson(decodedResponse['data']);
+        print('cool');
+        if (ret.accepted?.length == 0) {
+          print('0000000000000000000');
+        } else {
+          if (ret.accepted?.first?.track?.firstCarrierEvent?.length != 0 ||
+              ret.accepted?.first?.track?.secondCarrierEvent?.length != 0) {
+            ///loadData (ontrollerData.infoParcel)
+            if (controllerData.infoParcel.length ==
+                controllerData.register.length) {
+              ///loadData (ontrollerData.infoParcel)
+              for (int i = 0; i < controllerData.infoParcel.length; i++) {
+                print(1111);
+                print(controllerData.infoParcel[i].accepted.first.number);
+                print(ret.accepted?.first?.number);
+                print('ok');
+
+                ///loadData (ontrollerData.infoParcel)
+                if (controllerData.infoParcel[i].accepted.first.number ==
+                    ret.accepted?.first?.number) {
+                  print(controllerData.infoParcel.length);
+
+                  ///remove (ontrollerData.infoParcel)
+                  controllerData.infoParcel.removeAt(i);
+                  print(controllerData.infoParcel.length);
+
+                  ///add (ontrollerData.infoParcel)
+                  controllerData.infoParcel.add(ret);
+                  print(controllerData.infoParcel.length);
+                  print('обновили');
+                  break;
+                }
+              }
+            } else {
+              ///loadData (ontrollerData.infoParcel)
+              for (int i = 0; i < controllerData.infoParcel.length; i++) {
+                print(1111);
+                print(controllerData.infoParcel[i].accepted.first.number);
+                print(ret.accepted?.first?.number);
+                print('ok');
+
+                ///loadData (ontrollerData.infoParcel)
+                if (controllerData.infoParcel[i].accepted.first.number ==
+                    ret.accepted?.first?.number) {
+                  print(controllerData.infoParcel.length);
+
+                  ///remove (ontrollerData.infoParcel)
+                  controllerData.infoParcel.removeAt(i);
+                  print(controllerData.infoParcel.length);
+
+                  ///add (ontrollerData.infoParcel)
+                  controllerData.infoParcel.add(ret);
+                  print(controllerData.infoParcel.length);
+                  print('обновили');
+                  break;
+                }
+              }
+
+              ///loadData (ontrollerData.bed)
+              for (int i = 0; i < controllerData.bed.length; i++) {
+                print(controllerData.bed[i].rejected.first.number);
+                print(ret.accepted?.first?.number);
+                print('ok');
+
+                ///loadData (ontrollerData.bed)
+                if (controllerData.bed[i].rejected.first.number ==
+                    ret.accepted?.first?.number) {
+                  print(controllerData.infoParcel.length);
+
+                  /// add (ontrollerData.infoParcel)
+                  controllerData.infoParcel.add(ret);
+
+                  /// remove (ontrollerData.bed)
+                  controllerData.bed.removeAt(i);
+                  print(controllerData.infoParcel.length);
+                  print(controllerData.bed.length);
+                  print('oбновили');
+                  break;
+                }
+              }
+            }
+          }
+        }
+        print(ret);
+      } else {
+        print(request.statusCode);
+        print(request.body);
+        throw ServerException();
+      }
+    }
+    Get.snackbar('Tracker Parcel', 'Обновили');
+  }
 
   @override
   Future<int> carrierIdentify(String number) async {
