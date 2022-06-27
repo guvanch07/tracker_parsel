@@ -22,7 +22,7 @@ class _DropButtonState extends State<DropButton> {
       DropdownMenuItem(child: Text("Все посылки"), value: "Все посылки"),
       DropdownMenuItem(child: Text("Отслеживаются"), value: "Отслеживаются"),
       DropdownMenuItem(child: Text("Архив"), value: "Архив"),
-      DropdownMenuItem(child: Text("Не найдено"), value: "Не найдено"),
+      //DropdownMenuItem(child: Text("Не найдено"), value: "Не найдено"),
     ];
     return menuItems;
   }

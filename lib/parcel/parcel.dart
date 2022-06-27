@@ -68,15 +68,15 @@ class _ParselScreenState extends State<ParselScreen> {
   }
 
   Future<void> _refresh() async {
-    // try {
-    //   await NetworkService().updateInfoAboutParcel();
-    //   time = '${DateTime.now().hour}:${DateTime.now().minute}';
-    //   setState(() {
-    //     controllerData.infoParcel.length;
-    //   });
-    // } catch (e) {
-    //   print('i try');
-    // }
+    try {
+      await NetworkService().infoAboutParcel();
+      time = '${DateTime.now().hour}:${DateTime.now().minute}';
+      setState(() {
+        controllerData.infoParcel.length;
+      });
+    } catch (e) {
+      print('i try');
+    }
 
     // return Future.delayed(Duration(seconds: 400));
     // data = controllerData.infoParcel;
@@ -211,10 +211,10 @@ class _ParselScreenState extends State<ParselScreen> {
                           'Произошла ошибка',
                           style: kTextAppBar,
                         );
-                      } else if (snapshot.data.isNull) {
-                        return Center(child: Text('Empty'));
-                      } else {
+                      } else if (listOfNumbers.toString().isNotEmpty) {
                         return Center(child: CircularProgressIndicator());
+                      } else {
+                        return Center(child: Text('ADD PARCEl'));
                       }
                     },
                   ),

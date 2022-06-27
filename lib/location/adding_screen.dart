@@ -106,7 +106,7 @@ class _AddNumberState extends State<AddNumber> {
                     /// not shared
                     if (myController.text.toString().length != 0) {
                       await personService.registerParcel(myController.text);
-                      print('rtydgd');
+                      print('adding screen finished register and add parcel');
                       try {
                         print('bboobbob');
                         print(controllerData.infoParcel.length);
