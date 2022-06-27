@@ -17,6 +17,19 @@ import 'package:tracker_pkg/widget/dropdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tracker_pkg/widget/refresh_widget.dart';
 
+List<DropdownMenuItem<String>> get dropdownItems {
+  List<DropdownMenuItem<String>> menuItems = [
+    DropdownMenuItem(child: Text("Все посылки"), value: "Все посылки"),
+    DropdownMenuItem(
+        child: Text("В процессе доставки"), value: "В процессе доставки"),
+    DropdownMenuItem(child: Text("Доставлено"), value: "Доставлено"),
+    //DropdownMenuItem(child: Text("Не найдено"), value: "Не найдено"),
+  ];
+  return menuItems;
+}
+
+String selectedValue = "Все посылки";
+
 int tr = 2;
 var time = '${DateTime.now().hour}:${DateTime.now().minute}';
 
@@ -140,86 +153,334 @@ class _ParselScreenState extends State<ParselScreen> {
               SizedBox(
                 height: 11.h,
               ),
-              DropButton(),
-              SizedBox(
-                height: 450,
-                // child: controllerData.infoParcel.isNotEmpty || tr == 1
-                //     ? Center(child: CircularProgressIndicator())
-                child: RefreshWidget(
-                  //triggerMode: RefreshIndicatorTriggerMode.onEdge,
-                  onRefresh: _refresh,
-                  child: FutureBuilder(
-                    future: NetworkService().infoAboutParcel(),
-                    builder: (context, snapshot) {
-                      if (snapshot.data == 'hes data') {
-                        return ListView.builder(
-                          controller: _controller,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          // scrollDirection: Axis.vertical,
-                          shrinkWrap: false,
-                          primary: true,
-                          itemCount: listOfNumbers.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            det() {
-                              print(
-                                  'infoParsel : ${controllerData.infoParcel[index].accepted.first}');
-                              if (controllerData.infoParcel[index].accepted
-                                      .first.track.secondCarrierEvent.length ==
-                                  0) {
-                                return 1;
-                              } else {
-                                return 2;
-                              }
-                            }
-
-                            var current = controllerData
-                                .infoParcel[index].accepted?.first;
-                            DateTime tempData = DateTime.parse(det() == 1
-                                ? current.track.firstCarrierEvent[0].eventTime
-                                : current
-                                    .track.secondCarrierEvent[0].eventTime);
-
-                            return GestureDetector(
-                              onTap: () {
-                                final box = GetStorage('MyStorage');
-                                print('data: ${box.read('info')}');
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Following(
-                                      indexParcel: index,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: ParselWidget(
-                                text: current.number,
-                                time:
-                                    '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
-                                upgrade: time.toString(),
-                                where: det() == 1
-                                    ? current
-                                        .track.firstCarrierEvent[0].eventContent
-                                    : current.track.secondCarrierEvent[0]
-                                        .eventContent,
-                              ),
-                            );
-                          },
-                        );
-                      } else if (snapshot.data == 'error') {
-                        return Text(
-                          'Произошла ошибка',
-                          style: kTextAppBar,
-                        );
-                      } else if (listOfNumbers.toString().isNotEmpty) {
-                        return Center(child: CircularProgressIndicator());
-                      } else {
-                        return Center(child: Text('ADD PARCEl'));
-                      }
-                    },
-                  ),
+              Container(
+                //height: 47.h,
+                width: 361.w,
+                margin: EdgeInsets.all(10.r),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                 ),
+                child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      // hintText: 'filtr',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      // border: OutlineInputBorder(
+                      //   borderSide: BorderSide(color: Colors.white, width: 2),
+                      //   borderRadius: BorderRadius.circular(20),
+                      // ),
+                      //filled: true,
+                      //fillColor: Colors.white,
+                    ),
+                    dropdownColor: Colors.white,
+                    value: selectedValue,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedValue = newValue!;
+                      });
+                    },
+                    items: dropdownItems),
               ),
+              //DropButton(),
+              selectedValue == 'Все посылки'
+                  ? SizedBox(
+                      height: 450,
+                      // child: controllerData.infoParcel.isNotEmpty || tr == 1
+                      //     ? Center(child: CircularProgressIndicator())
+                      child: RefreshWidget(
+                        //triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                        onRefresh: _refresh,
+                        child: FutureBuilder(
+                          future: NetworkService().infoAboutParcel(),
+                          builder: (context, snapshot) {
+                            if (snapshot.data == 'hes data') {
+                              return ListView.builder(
+                                controller: _controller,
+                                physics: AlwaysScrollableScrollPhysics(),
+                                // scrollDirection: Axis.vertical,
+                                shrinkWrap: false,
+                                primary: true,
+                                itemCount: listOfNumbers.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  det() {
+                                    print(
+                                        'infoParsel : ${controllerData.infoParcel[index].accepted.first}');
+                                    if (controllerData
+                                            .infoParcel[index]
+                                            .accepted
+                                            .first
+                                            .track
+                                            .secondCarrierEvent
+                                            .length ==
+                                        0) {
+                                      return 1;
+                                    } else {
+                                      return 2;
+                                    }
+                                  }
+
+                                  var current = controllerData
+                                      .infoParcel[index].accepted?.first;
+                                  DateTime tempData = DateTime.parse(det() == 1
+                                      ? current
+                                          .track.firstCarrierEvent[0].eventTime
+                                      : current.track.secondCarrierEvent[0]
+                                          .eventTime);
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      final box = GetStorage('MyStorage');
+                                      print('data: ${box.read('info')}');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Following(
+                                            indexParcel: index,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ParselWidget(
+                                      text: current.number,
+                                      time:
+                                          '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                                      upgrade: time.toString(),
+                                      where: det() == 1
+                                          ? current.track.firstCarrierEvent[0]
+                                              .eventContent
+                                          : current.track.secondCarrierEvent[0]
+                                              .eventContent,
+                                    ),
+                                  );
+                                },
+                              );
+                            } else if (snapshot.data == 'error') {
+                              return Text(
+                                'Произошла ошибка',
+                                style: kTextAppBar,
+                              );
+                            } else if (listOfNumbers.toString().isNotEmpty) {
+                              return Center(child: CircularProgressIndicator());
+                            } else {
+                              return Center(child: Text('ADD PARCEl'));
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  : selectedValue == 'В процессе доставки'
+                      ? SizedBox(
+                          height: 450,
+                          // child: controllerData.infoParcel.isNotEmpty || tr == 1
+                          //     ? Center(child: CircularProgressIndicator())
+                          child: RefreshWidget(
+                            //triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                            onRefresh: _refresh,
+                            child: FutureBuilder(
+                              future: NetworkService().infoAboutParcel(),
+                              builder: (context, snapshot) {
+                                if (snapshot.data == 'hes data') {
+                                  return ListView.builder(
+                                    controller: _controller,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    // scrollDirection: Axis.vertical,
+                                    shrinkWrap: false,
+                                    primary: true,
+                                    itemCount: listOfNumbers.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      det() {
+                                        print(
+                                            'infoParsel : ${controllerData.infoParcel[index].accepted.first}');
+                                        if (controllerData
+                                                .infoParcel[index]
+                                                .accepted
+                                                .first
+                                                .track
+                                                .secondCarrierEvent
+                                                .length ==
+                                            0) {
+                                          return 1;
+                                        } else {
+                                          return 2;
+                                        }
+                                      }
+
+                                      var current = controllerData
+                                          .infoParcel[index].accepted?.first;
+                                      DateTime tempData = DateTime.parse(
+                                          det() == 1
+                                              ? current
+                                                  .track
+                                                  .firstCarrierEvent[0]
+                                                  .eventTime
+                                              : current
+                                                  .track
+                                                  .secondCarrierEvent[0]
+                                                  .eventTime);
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          final box = GetStorage('MyStorage');
+                                          print('data: ${box.read('info')}');
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Following(
+                                                indexParcel: index,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: ParselWidget(
+                                          text: current.number,
+                                          time:
+                                              '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                                          upgrade: time.toString(),
+                                          where: det() == 1
+                                              ? current
+                                                  .track
+                                                  .firstCarrierEvent[0]
+                                                  .eventContent
+                                              : current
+                                                  .track
+                                                  .secondCarrierEvent[0]
+                                                  .eventContent,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } else if (snapshot.data == 'error') {
+                                  return Text(
+                                    'Произошла ошибка',
+                                    style: kTextAppBar,
+                                  );
+                                } else if (listOfNumbers
+                                    .toString()
+                                    .isNotEmpty) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return Center(child: Text('ADD PARCEl'));
+                                }
+                              },
+                            ),
+                          ),
+                        )
+                      : selectedValue == 'Доставлено'
+                          ? SizedBox(
+                              height: 450,
+                              // child: controllerData.infoParcel.isNotEmpty || tr == 1
+                              //     ? Center(child: CircularProgressIndicator())
+                              child: RefreshWidget(
+                                //triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                                onRefresh: _refresh,
+                                child: FutureBuilder(
+                                  future: NetworkService().infoAboutParcel(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data == 'hes data') {
+                                      return ListView.builder(
+                                        controller: _controller,
+                                        physics:
+                                            AlwaysScrollableScrollPhysics(),
+                                        // scrollDirection: Axis.vertical,
+                                        shrinkWrap: false,
+                                        primary: true,
+                                        itemCount: listOfNumbers.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          det() {
+                                            print(
+                                                'infoParsel : ${controllerData.infoParcel[index].accepted.first}');
+                                            if (controllerData
+                                                    .infoParcel[index]
+                                                    .accepted
+                                                    .first
+                                                    .track
+                                                    .secondCarrierEvent
+                                                    .length ==
+                                                0) {
+                                              return 1;
+                                            } else {
+                                              return 2;
+                                            }
+                                          }
+
+                                          var current = controllerData
+                                              .infoParcel[index]
+                                              .accepted
+                                              ?.first;
+                                          DateTime tempData = DateTime.parse(
+                                              det() == 1
+                                                  ? current
+                                                      .track
+                                                      .firstCarrierEvent[0]
+                                                      .eventTime
+                                                  : current
+                                                      .track
+                                                      .secondCarrierEvent[0]
+                                                      .eventTime);
+
+                                          return GestureDetector(
+                                            onTap: () {
+                                              final box =
+                                                  GetStorage('MyStorage');
+                                              print(
+                                                  'data: ${box.read('info')}');
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Following(
+                                                    indexParcel: index,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: ParselWidget(
+                                              text: current.number,
+                                              time:
+                                                  '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                                              upgrade: time.toString(),
+                                              where: det() == 1
+                                                  ? current
+                                                      .track
+                                                      .firstCarrierEvent[0]
+                                                      .eventContent
+                                                  : current
+                                                      .track
+                                                      .secondCarrierEvent[0]
+                                                      .eventContent,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else if (snapshot.data == 'error') {
+                                      return Text(
+                                        'Произошла ошибка',
+                                        style: kTextAppBar,
+                                      );
+                                    } else if (listOfNumbers
+                                        .toString()
+                                        .isNotEmpty) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    } else {
+                                      return Center(child: Text('ADD PARCEl'));
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          : Text('no state'),
+
               SizedBox(
                 height: 17.h,
               ),
