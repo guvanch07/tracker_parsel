@@ -91,16 +91,58 @@ saveData1(String parselNumber, int parselCarrier) async {
   var listOfNumbers = [];
   var listOfCarriers = [];
   box.writeIfNull('numbers', listOfNumbers);
-  box.writeIfNull('carrier', listOfCarriers);
+  box.writeIfNull('carriers', listOfCarriers);
 
   listOfNumbers = box.read('numbers');
-  listOfCarriers = box.read('carrier');
+  listOfCarriers = box.read('carriers');
   listOfNumbers.add(parselNumber);
   listOfCarriers.add(parselCarrier);
-  print('data saved');
+  print('data saved all parcel');
   // print('Generated json ${json}');
   box.write('numbers', listOfNumbers);
   box.write('carriers', listOfCarriers);
+
+  //
+  // List<String> jsonList = model.map((mod) => mod.toJson()).toList();
+  // prefs.setStringList(key, jsonList);
+  // print('Generated json ${jsonList}');
+
+  // prefs3.setStringList(json);
+}
+
+saveDataDelivering(String parselNumber, int parselCarrier) async {
+  print('SaveDataDelivering');
+  final box = GetStorage('MyStorage');
+  var listOfNumbers = [];
+  var listOfCarriers = [];
+  box.writeIfNull('numbersDelivering', listOfNumbers);
+  box.writeIfNull('carriersDelivering', listOfCarriers);
+
+  listOfNumbers = box.read('numbersDelivering');
+  listOfCarriers = box.read('carriersDelivering');
+  listOfNumbers.add(parselNumber);
+  listOfCarriers.add(parselCarrier);
+  print('data saved Delivering');
+  box.write('numbersDelivering', listOfNumbers);
+  box.write('carriersDelivering', listOfCarriers);
+}
+
+saveDataDelivered(String parselNumber, int parselCarrier) async {
+  print('SAveDataDelivered');
+  final box = GetStorage('MyStorage');
+  var listOfNumbers = [];
+  var listOfCarriers = [];
+  box.writeIfNull('numbersDelivered', listOfNumbers);
+  box.writeIfNull('carriersDelivered', listOfCarriers);
+
+  listOfNumbers = box.read('numbersDelivered');
+  listOfCarriers = box.read('carriersDelivered');
+  listOfNumbers.add(parselNumber);
+  listOfCarriers.add(parselCarrier);
+  print('data saved Delivered');
+  // print('Generated json ${json}');
+  box.write('numbersDelivered', listOfNumbers);
+  box.write('carriersDelivered', listOfCarriers);
 
   //
   // List<String> jsonList = model.map((mod) => mod.toJson()).toList();
@@ -161,6 +203,8 @@ saveData1(String parselNumber, int parselCarrier) async {
 
 class DataSource extends GetxController {
   List infoParcel = [];
+  List infoParcelDelivered = [];
+  List infoParcelDelivering = [];
   List register = [];
   List bed = [];
   GetStorage box = GetStorage('MyStorage');
@@ -178,6 +222,8 @@ class DataSource extends GetxController {
   @override
   void onInit() {
     infoParcel;
+    infoParcelDelivered;
+    infoParcelDelivering;
     register;
     bed;
     //loadData();

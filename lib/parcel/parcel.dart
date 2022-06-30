@@ -45,6 +45,8 @@ class _ParselScreenState extends State<ParselScreen> {
   ScrollController? _controller;
   String message = "";
   List listOfNumbers = [];
+  List listOfNumbersDelivered = [];
+  List listOfNumbersDelivering = [];
   final box = GetStorage('MyStorage');
 
   //
@@ -73,6 +75,12 @@ class _ParselScreenState extends State<ParselScreen> {
     //print(box.read('info'));
     box.writeIfNull('numbers', listOfNumbers);
     listOfNumbers = box.read('numbers');
+
+    box.writeIfNull('numbersDelivering', listOfNumbersDelivering);
+    listOfNumbersDelivering = box.read('numbersDelivering');
+
+    box.writeIfNull('numbersDelivered', listOfNumbersDelivered);
+    listOfNumbersDelivered = box.read('numbersDelivered');
 
     // NetworkService()
     //     .infoAboutParcel();
@@ -266,7 +274,7 @@ class _ParselScreenState extends State<ParselScreen> {
                                 'Произошла ошибка',
                                 style: kTextAppBar,
                               );
-                            } else if (listOfNumbers.toString().isNotEmpty) {
+                            } else if (listOfNumbers.isNotEmpty) {
                               return Center(child: CircularProgressIndicator());
                             } else {
                               return Center(child: Text('ADD PARCEl'));
@@ -280,204 +288,223 @@ class _ParselScreenState extends State<ParselScreen> {
                           height: 450,
                           // child: controllerData.infoParcel.isNotEmpty || tr == 1
                           //     ? Center(child: CircularProgressIndicator())
-                          child: RefreshWidget(
-                            //triggerMode: RefreshIndicatorTriggerMode.onEdge,
-                            onRefresh: _refresh,
-                            child: FutureBuilder(
-                              future: NetworkService().infoAboutParcel(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data == 'hes data') {
-                                  return ListView.builder(
-                                    controller: _controller,
-                                    physics: AlwaysScrollableScrollPhysics(),
-                                    // scrollDirection: Axis.vertical,
-                                    shrinkWrap: false,
-                                    primary: true,
-                                    itemCount: listOfNumbers.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      det() {
-                                        print(
-                                            'infoParsel : ${controllerData.infoParcel[index].accepted.first}');
-                                        if (controllerData
-                                                .infoParcel[index]
+                          child: listOfNumbersDelivering.isEmpty
+                              ? Text('Empty')
+                              : RefreshWidget(
+                                  //triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                                  onRefresh: _refresh,
+                                  child: FutureBuilder(
+                                    future: NetworkService().infoAboutParcel(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data == 'hes data') {
+                                        return ListView.builder(
+                                          controller: _controller,
+                                          physics:
+                                              AlwaysScrollableScrollPhysics(),
+                                          // scrollDirection: Axis.vertical,
+                                          shrinkWrap: false,
+                                          primary: true,
+                                          itemCount:
+                                              listOfNumbersDelivering.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            det() {
+                                              print(
+                                                  'infoParsel : ${controllerData.infoParcelDelivering[index].accepted.first}');
+                                              if (controllerData
+                                                      .infoParcelDelivering[
+                                                          index]
+                                                      .accepted
+                                                      .first
+                                                      .track
+                                                      .secondCarrierEvent
+                                                      .length ==
+                                                  0) {
+                                                return 1;
+                                              } else {
+                                                return 2;
+                                              }
+                                            }
+
+                                            var current = controllerData
+                                                .infoParcelDelivering[index]
                                                 .accepted
-                                                .first
-                                                .track
-                                                .secondCarrierEvent
-                                                .length ==
-                                            0) {
-                                          return 1;
-                                        } else {
-                                          return 2;
-                                        }
-                                      }
+                                                ?.first;
+                                            DateTime tempData = DateTime.parse(
+                                                det() == 1
+                                                    ? current
+                                                        .track
+                                                        .firstCarrierEvent[0]
+                                                        .eventTime
+                                                    : current
+                                                        .track
+                                                        .secondCarrierEvent[0]
+                                                        .eventTime);
 
-                                      var current = controllerData
-                                          .infoParcel[index].accepted?.first;
-                                      DateTime tempData = DateTime.parse(
-                                          det() == 1
-                                              ? current
-                                                  .track
-                                                  .firstCarrierEvent[0]
-                                                  .eventTime
-                                              : current
-                                                  .track
-                                                  .secondCarrierEvent[0]
-                                                  .eventTime);
-
-                                      return GestureDetector(
-                                        onTap: () {
-                                          final box = GetStorage('MyStorage');
-                                          print('data: ${box.read('info')}');
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Following(
-                                                indexParcel: index,
+                                            return GestureDetector(
+                                              onTap: () {
+                                                final box =
+                                                    GetStorage('MyStorage');
+                                                print(
+                                                    'data: ${box.read('info')}');
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FollowingDelivering(
+                                                      indexParcel: index,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: ParselWidget(
+                                                text: current.number,
+                                                time:
+                                                    '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                                                upgrade: time.toString(),
+                                                where: det() == 1
+                                                    ? current
+                                                        .track
+                                                        .firstCarrierEvent[0]
+                                                        .eventContent
+                                                    : current
+                                                        .track
+                                                        .secondCarrierEvent[0]
+                                                        .eventContent,
                                               ),
-                                            ),
-                                          );
-                                        },
-                                        child: ParselWidget(
-                                          text: current.number,
-                                          time:
-                                              '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
-                                          upgrade: time.toString(),
-                                          where: det() == 1
-                                              ? current
-                                                  .track
-                                                  .firstCarrierEvent[0]
-                                                  .eventContent
-                                              : current
-                                                  .track
-                                                  .secondCarrierEvent[0]
-                                                  .eventContent,
-                                        ),
-                                      );
+                                            );
+                                          },
+                                        );
+                                      } else if (snapshot.data == 'error') {
+                                        return Text(
+                                          'Произошла ошибка',
+                                          style: kTextAppBar,
+                                        );
+                                      } else if (listOfNumbers.isNotEmpty) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      } else {
+                                        return Center(
+                                            child: Text('ADD PARCEl'));
+                                      }
                                     },
-                                  );
-                                } else if (snapshot.data == 'error') {
-                                  return Text(
-                                    'Произошла ошибка',
-                                    style: kTextAppBar,
-                                  );
-                                } else if (listOfNumbers
-                                    .toString()
-                                    .isNotEmpty) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return Center(child: Text('ADD PARCEl'));
-                                }
-                              },
-                            ),
-                          ),
+                                  ),
+                                ),
                         )
                       : selectedValue == 'Доставлено'
                           ? SizedBox(
                               height: 450,
                               // child: controllerData.infoParcel.isNotEmpty || tr == 1
                               //     ? Center(child: CircularProgressIndicator())
-                              child: RefreshWidget(
-                                //triggerMode: RefreshIndicatorTriggerMode.onEdge,
-                                onRefresh: _refresh,
-                                child: FutureBuilder(
-                                  future: NetworkService().infoAboutParcel(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.data == 'hes data') {
-                                      return ListView.builder(
-                                        controller: _controller,
-                                        physics:
-                                            AlwaysScrollableScrollPhysics(),
-                                        // scrollDirection: Axis.vertical,
-                                        shrinkWrap: false,
-                                        primary: true,
-                                        itemCount: listOfNumbers.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          det() {
-                                            print(
-                                                'infoParsel : ${controllerData.infoParcel[index].accepted.first}');
-                                            if (controllerData
-                                                    .infoParcel[index]
+                              child: listOfNumbersDelivered.isEmpty
+                                  ? Text('Empty')
+                                  : RefreshWidget(
+                                      //triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                                      onRefresh: _refresh,
+                                      child: FutureBuilder(
+                                        future:
+                                            NetworkService().infoAboutParcel(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.data == 'hes data') {
+                                            return ListView.builder(
+                                              controller: _controller,
+                                              physics:
+                                                  AlwaysScrollableScrollPhysics(),
+                                              // scrollDirection: Axis.vertical,
+                                              shrinkWrap: false,
+                                              primary: true,
+                                              itemCount:
+                                                  listOfNumbersDelivered.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                det() {
+                                                  print(
+                                                      'infoParsel : ${controllerData.infoParcelDelivered[index].accepted.first}');
+                                                  if (controllerData
+                                                          .infoParcelDelivered[
+                                                              index]
+                                                          .accepted
+                                                          .first
+                                                          .track
+                                                          .secondCarrierEvent
+                                                          .length ==
+                                                      0) {
+                                                    return 1;
+                                                  } else {
+                                                    return 2;
+                                                  }
+                                                }
+
+                                                var current = controllerData
+                                                    .infoParcelDelivered[index]
                                                     .accepted
-                                                    .first
-                                                    .track
-                                                    .secondCarrierEvent
-                                                    .length ==
-                                                0) {
-                                              return 1;
-                                            } else {
-                                              return 2;
-                                            }
-                                          }
+                                                    ?.first;
+                                                DateTime tempData =
+                                                    DateTime.parse(det() == 1
+                                                        ? current
+                                                            .track
+                                                            .firstCarrierEvent[
+                                                                0]
+                                                            .eventTime
+                                                        : current
+                                                            .track
+                                                            .secondCarrierEvent[
+                                                                0]
+                                                            .eventTime);
 
-                                          var current = controllerData
-                                              .infoParcel[index]
-                                              .accepted
-                                              ?.first;
-                                          DateTime tempData = DateTime.parse(
-                                              det() == 1
-                                                  ? current
-                                                      .track
-                                                      .firstCarrierEvent[0]
-                                                      .eventTime
-                                                  : current
-                                                      .track
-                                                      .secondCarrierEvent[0]
-                                                      .eventTime);
-
-                                          return GestureDetector(
-                                            onTap: () {
-                                              final box =
-                                                  GetStorage('MyStorage');
-                                              print(
-                                                  'data: ${box.read('info')}');
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Following(
-                                                    indexParcel: index,
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    final box =
+                                                        GetStorage('MyStorage');
+                                                    print(
+                                                        'data: ${box.read('info')}');
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            FollowingDelivered(
+                                                          indexParcel: index,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: ParselWidget(
+                                                    text: current.number,
+                                                    time:
+                                                        '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
+                                                    upgrade: time.toString(),
+                                                    where: det() == 1
+                                                        ? current
+                                                            .track
+                                                            .firstCarrierEvent[
+                                                                0]
+                                                            .eventContent
+                                                        : current
+                                                            .track
+                                                            .secondCarrierEvent[
+                                                                0]
+                                                            .eventContent,
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            child: ParselWidget(
-                                              text: current.number,
-                                              time:
-                                                  '${tempData.day}.${tempData.month.toString().length == 1 ? "0${tempData.month}" : tempData.month}',
-                                              upgrade: time.toString(),
-                                              where: det() == 1
-                                                  ? current
-                                                      .track
-                                                      .firstCarrierEvent[0]
-                                                      .eventContent
-                                                  : current
-                                                      .track
-                                                      .secondCarrierEvent[0]
-                                                      .eventContent,
-                                            ),
-                                          );
+                                                );
+                                              },
+                                            );
+                                          } else if (snapshot.data == 'error') {
+                                            return Text(
+                                              'Произошла ошибка',
+                                              style: kTextAppBar,
+                                            );
+                                          } else if (listOfNumbers.isNotEmpty) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else {
+                                            return Center(
+                                                child: Text('ADD PARCEl'));
+                                          }
                                         },
-                                      );
-                                    } else if (snapshot.data == 'error') {
-                                      return Text(
-                                        'Произошла ошибка',
-                                        style: kTextAppBar,
-                                      );
-                                    } else if (listOfNumbers
-                                        .toString()
-                                        .isNotEmpty) {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    } else {
-                                      return Center(child: Text('ADD PARCEl'));
-                                    }
-                                  },
-                                ),
-                              ),
+                                      ),
+                                    ),
                             )
                           : Text('no state'),
 

@@ -149,7 +149,13 @@ class NetworkService {
     var response;
     if ((number == null && carrier == null) || number == null) {
       List listOfNumbers = box.read('numbers');
-      List listOfCarriers = box.read('carrier');
+      List listOfCarriers = box.read('carriers');
+
+      List? listOfNumbersDelivering = box.read('numbersDelivering');
+      List? listOfCarriersDelivering = box.read('carriersDelivering');
+
+      List? listOfNumbersDelivered = box.read('numbersDelivered');
+      List? listOfCarriersDelivered = box.read('carriersDelivered');
       print('listOfNumbers.length ${listOfNumbers.length}');
       for (int i = 0; i < listOfNumbers.length; i++) {
         response = await client.post(
@@ -194,30 +200,96 @@ class NetworkService {
               }
               if (n == 0) {
                 controllerData.infoParcel.add(ret);
+
+                det() {
+                  print('infoParsel : ${ret.accepted?.first}');
+                  if (ret.accepted?.first?.track?.secondCarrierEvent?.length ==
+                      0) {
+                    return 1;
+                  } else {
+                    return 2;
+                  }
+                }
+
+                var current = ret.accepted?.first;
+                String? content1 = current
+                    ?.track?.firstCarrierEvent![0]?.eventContent!
+                    .toLowerCase();
+                String? content2 = current
+                    ?.track?.secondCarrierEvent![0]?.eventContent
+                    ?.toUpperCase();
+
+                if (det() == 1) {
+                  if (content1!.contains('вручено') ||
+                      content1.contains('delivery') ||
+                      content1.contains('delivered') ||
+                      content1.contains('доставлено') ||
+                      content2!.contains('вручено') ||
+                      content2.contains('delivery') ||
+                      content2.contains('delivered') ||
+                      content2.contains('доставлено')) {
+                    await saveDataDelivered(
+                        listOfNumbers[i], listOfCarriers[i]);
+                    //await loadData1('info');
+                    controllerData.infoParcelDelivered.add(ret);
+                  } else {
+                    await saveDataDelivering(
+                        listOfNumbers[i], listOfCarriers[i]);
+                    //await loadData1('info');
+                    controllerData.infoParcelDelivering.add(ret);
+                  }
+                }
                 print(
                     '  print(controllerData.infoParcel.length) : ${controllerData.infoParcel.length}');
-                print(controllerData.infoParcel.length);
-                //return 'hes data';
+                print(
+                    '  print(controllerData.infoParcelDelivering.length) : ${controllerData.infoParcelDelivering.length}');
+                print('  print(controllerData.infoParcelDelivered'
+                    ''
+                    '.length) : ${controllerData.infoParcelDelivered.length}');
               }
               //return 'hes data';
             } else {
-              // if (controllerData.infoParcel[i].accepted.first.number ==
-              //     ret.accepted?.first?.number) {
-              //   print(controllerData.infoParcel.length);
-              //
-              //   ///remove (ontrollerData.infoParcel)
-              //   controllerData.infoParcel.removeAt(i);
-              //   print(controllerData.infoParcel.length);
-              //
-              //   ///add (ontrollerData.infoParcel)
-              //   controllerData.infoParcel.add(ret);
-              //   print(controllerData.infoParcel.length);
-              //   print('обновили');
               controllerData.infoParcel.add(ret);
+
+              det() {
+                print('infoParsel : ${ret.accepted?.first}');
+                if (ret.accepted?.first?.track?.secondCarrierEvent?.length ==
+                    0) {
+                  return 1;
+                } else {
+                  return 2;
+                }
+              }
+
+              var current = ret.accepted?.first;
+              String? content1 = current
+                  ?.track?.firstCarrierEvent![0]?.eventContent!
+                  .toLowerCase();
+              String? content2 = current
+                  ?.track?.secondCarrierEvent![0]?.eventContent
+                  ?.toUpperCase();
+
+              if (det() == 1) {
+                if (content1!.contains('вручено') ||
+                    content1.contains('delivery') ||
+                    content1.contains('delivered') ||
+                    content1.contains('доставлено')) {
+                  await saveDataDelivered(listOfNumbers[i], listOfCarriers[i]);
+                  //await loadData1('info');
+                  controllerData.infoParcelDelivered.add(ret);
+                } else {
+                  await saveDataDelivering(listOfNumbers[i], listOfCarriers[i]);
+                  //await loadData1('info');
+                  controllerData.infoParcelDelivering.add(ret);
+                }
+              }
               print(
                   '  print(controllerData.infoParcel.length) : ${controllerData.infoParcel.length}');
-              print(controllerData.infoParcel.length);
-              // return 'hes data';
+              print(
+                  '  print(controllerData.infoParcelDelivering.length) : ${controllerData.infoParcelDelivering.length}');
+              print('  print(controllerData.infoParcelDelivered'
+                  ''
+                  '.length) : ${controllerData.infoParcelDelivered.length}');
             }
           }
         } else {
@@ -236,12 +308,7 @@ class NetworkService {
       if (response.statusCode == 200) {
         var decodedResponse =
             jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-        //print(decodedResponse);
         var ret = Data2.fromJson(decodedResponse['data']);
-
-        // print('cool');
-        // print(ret);
-        //loadData('register_${ret.accepted?.first?.number}');
         if (ret.accepted?.length == 0) {
           print(ret);
           controllerData.bed.add(ret);
@@ -249,24 +316,60 @@ class NetworkService {
           // LB013603058CN  3011
           // LV336687519CN  3011
           print('No tracking information at this time.');
-          // Get.snackbar(
-          //     'Tracker Parcel', 'No tracking information at this time.');
           Get.snackbar(
               'Tracker Parcel', 'Что-то пошло не так, попробуйте позже');
           return 'error';
         } else {
+          print('1111111111111111111');
           await saveData1(number, carrier!);
+          print('222222222222222222222222');
           //await loadData1('info');
           controllerData.infoParcel.add(ret);
+          print('333333333333333333');
+
+          det() {
+            print('det det det det');
+            print('infoParsel : ${ret.accepted?.first}');
+            var current = ret.accepted?.first;
+            if (ret.accepted?.first?.track?.secondCarrierEvent?.length == 0) {
+              String? content1 = current
+                  ?.track?.firstCarrierEvent?[0]?.eventContent!
+                  .toLowerCase();
+              return content1;
+            } else {
+              String? content2 = current
+                  ?.track?.secondCarrierEvent![0]?.eventContent
+                  ?.toLowerCase();
+              return content2;
+            }
+          }
+
+          if (det()!.contains('вручено') ||
+              det()!.contains('delivery') ||
+              det()!.contains('delivered') ||
+              det()!.contains('доставлено')) {
+            print('4444444444444444444');
+            await saveDataDelivered(number, carrier);
+            controllerData.infoParcelDelivered.add(ret);
+          } else {
+            print('5555555555555');
+            await saveDataDelivering(number, carrier);
+            controllerData.infoParcelDelivering.add(ret);
+          }
+
           print(
               '  print(controllerData.infoParcel.length) : ${controllerData.infoParcel.length}');
+          print(
+              '  print(controllerData.infoParcelDelivering.length) : ${controllerData.infoParcelDelivering.length}');
+          print('  print(controllerData.infoParcelDelivered'
+              ''
+              '.length) : ${controllerData.infoParcelDelivered.length}');
           Get.snackbar('Tracker Parcel', 'Ваша посылка была успешно добавлена');
           return 'has data';
         }
       } else {
         print(response.statusCode);
         print(response.body);
-        //throw ServerException();
         return 'error';
       }
     }
