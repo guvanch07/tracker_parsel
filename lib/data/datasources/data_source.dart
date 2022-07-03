@@ -151,11 +151,11 @@ class NetworkService {
       List listOfNumbers = box.read('numbers');
       List listOfCarriers = box.read('carriers');
 
-      List? listOfNumbersDelivering = box.read('numbersDelivering');
-      List? listOfCarriersDelivering = box.read('carriersDelivering');
-
-      List? listOfNumbersDelivered = box.read('numbersDelivered');
-      List? listOfCarriersDelivered = box.read('carriersDelivered');
+      // List? listOfNumbersDelivering = box.read('numbersDelivering');
+      // List? listOfCarriersDelivering = box.read('carriersDelivering');
+      //
+      // List? listOfNumbersDelivered = box.read('numbersDelivered');
+      // List? listOfCarriersDelivered = box.read('carriersDelivered');
       print('listOfNumbers.length ${listOfNumbers.length}');
       for (int i = 0; i < listOfNumbers.length; i++) {
         response = await client.post(
@@ -166,7 +166,7 @@ class NetworkService {
         if (response.statusCode == 200) {
           var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes))
               as Map<String, dynamic>;
-          var ret = Data2.fromJson(decodedResponse['data']);
+          var ret = await Data2.fromJson(decodedResponse['data']);
           //loadData('register_${ret.accepted?.first?.number}');
           if (ret.accepted?.length == 0) {
             controllerData.bed.add(ret);
@@ -201,44 +201,6 @@ class NetworkService {
               if (n == 0) {
                 controllerData.infoParcel.add(ret);
 
-                det() {
-                  print('infoParsel : ${ret.accepted?.first}');
-                  if (ret.accepted?.first?.track?.secondCarrierEvent?.length ==
-                      0) {
-                    return 1;
-                  } else {
-                    return 2;
-                  }
-                }
-
-                var current = ret.accepted?.first;
-                String? content1 = current
-                    ?.track?.firstCarrierEvent![0]?.eventContent!
-                    .toLowerCase();
-                String? content2 = current
-                    ?.track?.secondCarrierEvent![0]?.eventContent
-                    ?.toUpperCase();
-
-                if (det() == 1) {
-                  if (content1!.contains('вручено') ||
-                      content1.contains('delivery') ||
-                      content1.contains('delivered') ||
-                      content1.contains('доставлено') ||
-                      content2!.contains('вручено') ||
-                      content2.contains('delivery') ||
-                      content2.contains('delivered') ||
-                      content2.contains('доставлено')) {
-                    await saveDataDelivered(
-                        listOfNumbers[i], listOfCarriers[i]);
-                    //await loadData1('info');
-                    controllerData.infoParcelDelivered.add(ret);
-                  } else {
-                    await saveDataDelivering(
-                        listOfNumbers[i], listOfCarriers[i]);
-                    //await loadData1('info');
-                    controllerData.infoParcelDelivering.add(ret);
-                  }
-                }
                 print(
                     '  print(controllerData.infoParcel.length) : ${controllerData.infoParcel.length}');
                 print(
@@ -250,38 +212,37 @@ class NetworkService {
               //return 'hes data';
             } else {
               controllerData.infoParcel.add(ret);
-
               det() {
+                print('det det det det');
                 print('infoParsel : ${ret.accepted?.first}');
+                var current = ret.accepted?.first;
                 if (ret.accepted?.first?.track?.secondCarrierEvent?.length ==
                     0) {
-                  return 1;
+                  String? content1 = current
+                      ?.track?.firstCarrierEvent?[0]?.eventContent!
+                      .toLowerCase();
+                  return content1;
                 } else {
-                  return 2;
+                  String? content2 = current
+                      ?.track?.secondCarrierEvent![0]?.eventContent
+                      ?.toLowerCase();
+                  return content2;
                 }
               }
 
-              var current = ret.accepted?.first;
-              String? content1 = current
-                  ?.track?.firstCarrierEvent![0]?.eventContent!
-                  .toLowerCase();
-              String? content2 = current
-                  ?.track?.secondCarrierEvent![0]?.eventContent
-                  ?.toUpperCase();
-
-              if (det() == 1) {
-                if (content1!.contains('вручено') ||
-                    content1.contains('delivery') ||
-                    content1.contains('delivered') ||
-                    content1.contains('доставлено')) {
-                  await saveDataDelivered(listOfNumbers[i], listOfCarriers[i]);
-                  //await loadData1('info');
-                  controllerData.infoParcelDelivered.add(ret);
-                } else {
-                  await saveDataDelivering(listOfNumbers[i], listOfCarriers[i]);
-                  //await loadData1('info');
-                  controllerData.infoParcelDelivering.add(ret);
-                }
+              if (det()!.contains('вручено') ||
+                  det()!.contains('delivery') ||
+                  det()!.contains('delivered') ||
+                  det()!.contains('доставлено')) {
+                print('4444444444444444444');
+                print(det());
+                //await saveDataDelivered(listOfNumbers[i], listOfCarriers[i]);
+                controllerData.infoParcelDelivered.add(ret);
+              } else {
+                print(det());
+                print('5555555555555');
+                //await saveDataDelivering(listOfNumbers[i], listOfCarriers[i]);
+                controllerData.infoParcelDelivering.add(ret);
               }
               print(
                   '  print(controllerData.infoParcel.length) : ${controllerData.infoParcel.length}');
@@ -291,6 +252,207 @@ class NetworkService {
                   ''
                   '.length) : ${controllerData.infoParcelDelivered.length}');
             }
+
+            if (controllerData.infoParcelDelivered.isNotEmpty) {
+              int t = 0;
+              for (int arti = 0;
+                  arti < controllerData.infoParcelDelivered.length;
+                  arti++) {
+                if (controllerData
+                        .infoParcelDelivered[arti].accepted.first.number ==
+                    ret.accepted?.first?.number) {
+                  controllerData.infoParcelDelivered.removeAt(arti);
+                  controllerData.infoParcelDelivered.add(ret);
+                  t = 1;
+                }
+              }
+              if (t == 0) {
+                controllerData.infoParcelDelivered.add(ret);
+              }
+            } else {
+              det() {
+                print('det det det det');
+                print('infoParsel : ${ret.accepted?.first}');
+                var current = ret.accepted?.first;
+                if (ret.accepted?.first?.track?.secondCarrierEvent?.length ==
+                    0) {
+                  String? content1 = current
+                      ?.track?.firstCarrierEvent?[0]?.eventContent!
+                      .toLowerCase();
+                  return content1;
+                } else {
+                  String? content2 = current
+                      ?.track?.secondCarrierEvent![0]?.eventContent
+                      ?.toLowerCase();
+                  return content2;
+                }
+              }
+
+              if (det()!.contains('вручено') ||
+                  det()!.contains('delivery') ||
+                  det()!.contains('delivered') ||
+                  det()!.contains('доставлено')) {
+                print('4444444444444444444');
+                if (controllerData.infoParcelDelivered.isNotEmpty) {
+                  int k = 0;
+                  for (int arti = 0;
+                      arti < controllerData.infoParcelDelivered.length;
+                      arti++) {
+                    if (controllerData
+                            .infoParcelDelivered[arti].accepted.first.number ==
+                        ret.accepted?.first?.number) {
+                      controllerData.infoParcelDelivered.removeAt(arti);
+                      controllerData.infoParcelDelivered.add(ret);
+                      k = 1;
+                    }
+                  }
+                  if (k == 0) {
+                    controllerData.infoParcelDelivered.add(ret);
+                  }
+                } else {
+                  controllerData.infoParcelDelivered.add(ret);
+                }
+              } else {
+                print('5555555555555');
+                if (controllerData.infoParcelDelivering.isNotEmpty) {
+                  int f = 0;
+                  for (int arti = 0;
+                      arti < controllerData.infoParcelDelivering.length;
+                      arti++) {
+                    if (controllerData
+                            .infoParcelDelivering[arti].accepted.first.number ==
+                        ret.accepted?.first?.number) {
+                      controllerData.infoParcelDelivering.removeAt(arti);
+                      controllerData.infoParcelDelivering.add(ret);
+                      f = 1;
+                    }
+                  }
+                  if (f == 0) {
+                    controllerData.infoParcelDelivering.add(ret);
+                  }
+                } else {
+                  controllerData.infoParcelDelivering.add(ret);
+                }
+              }
+            }
+            if (controllerData.infoParcelDelivering.isNotEmpty) {
+              int a = 0;
+              for (int arti = 0;
+                  arti < controllerData.infoParcelDelivering.length;
+                  arti++) {
+                if (controllerData
+                        .infoParcelDelivering[arti].accepted.first.number ==
+                    ret.accepted?.first?.number) {
+                  det() {
+                    print('det det det det');
+                    print('infoParsel : ${ret.accepted?.first}');
+                    var current = ret.accepted?.first;
+                    if (ret.accepted?.first?.track?.secondCarrierEvent
+                            ?.length ==
+                        0) {
+                      String? content1 = current
+                          ?.track?.firstCarrierEvent?[0]?.eventContent!
+                          .toLowerCase();
+                      return content1;
+                    } else {
+                      String? content2 = current
+                          ?.track?.secondCarrierEvent![0]?.eventContent
+                          ?.toLowerCase();
+                      return content2;
+                    }
+                  }
+
+                  if (det()!.contains('вручено') ||
+                      det()!.contains('delivery') ||
+                      det()!.contains('delivered') ||
+                      det()!.contains('доставлено')) {
+                    print('4444444444444444444');
+                    controllerData.infoParcelDelivering.removeAt(arti);
+                    await saveDataDelivered(
+                        listOfNumbers[i], listOfCarriers[i]);
+                    controllerData.infoParcelDelivered.add(ret);
+                    var listNumbers = [];
+                    var listCarriers = [];
+                    box.writeIfNull('numbersDelivering', listNumbers);
+                    box.writeIfNull('carriersDelivering', listOfCarriers);
+
+                    listNumbers = box.read('numbersDelivering');
+                    listCarriers = box.read('carriersDelivering');
+                    listNumbers.remove(listOfNumbers[i]);
+                    listCarriers.remove(listOfCarriers[i]);
+                    print('data saved Delivering');
+                    box.remove('numbersDelivering');
+                    box.remove('carriersDelivering');
+                    box.write('numbersDelivering', listNumbers);
+                    box.write('carriersDelivering', listCarriers);
+                    a = 1;
+                  } else {
+                    print('5555555555555');
+                    controllerData.infoParcelDelivering.removeAt(arti);
+                    controllerData.infoParcelDelivering.add(ret);
+                    a = 1;
+                  }
+                }
+              }
+              if (a == 0) {
+                controllerData.infoParcelDelivering.add(ret);
+              }
+            } else {
+              det() {
+                print('det det det det');
+                print('infoParsel : ${ret.accepted?.first}');
+                var current = ret.accepted?.first;
+                if (ret.accepted?.first?.track?.secondCarrierEvent?.length ==
+                    0) {
+                  String? content1 = current
+                      ?.track?.firstCarrierEvent?[0]?.eventContent!
+                      .toLowerCase();
+                  return content1;
+                } else {
+                  String? content2 = current
+                      ?.track?.secondCarrierEvent![0]?.eventContent
+                      ?.toLowerCase();
+                  return content2;
+                }
+              }
+
+              if (det()!.contains('вручено') ||
+                  det()!.contains('delivery') ||
+                  det()!.contains('delivered') ||
+                  det()!.contains('доставлено')) {
+                print('4444444444444444444');
+                if (controllerData.infoParcelDelivered.isNotEmpty) {
+                  for (int arti = 0;
+                      arti < controllerData.infoParcelDelivered.length;
+                      arti++) {
+                    if (controllerData
+                            .infoParcelDelivered[arti].accepted.first.number ==
+                        ret.accepted?.first?.number) {
+                      controllerData.infoParcelDelivered.removeAt(arti);
+                      controllerData.infoParcelDelivered.add(ret);
+                    }
+                  }
+                } else {
+                  controllerData.infoParcelDelivered.add(ret);
+                }
+              } else {
+                print('5555555555555');
+                if (controllerData.infoParcelDelivering.isNotEmpty) {
+                  for (int arti = 0;
+                      arti < controllerData.infoParcelDelivering.length;
+                      arti++) {
+                    if (controllerData
+                            .infoParcelDelivering[arti].accepted.first.number ==
+                        ret.accepted?.first?.number) {
+                      controllerData.infoParcelDelivering.removeAt(arti);
+                      controllerData.infoParcelDelivering.add(ret);
+                    }
+                  }
+                } else {
+                  controllerData.infoParcelDelivering.add(ret);
+                }
+              }
+            }
           }
         } else {
           print(response.statusCode);
@@ -298,6 +460,13 @@ class NetworkService {
           //throw ServerException();
           return 'error';
         }
+        print(
+            '  print(controllerData.infoParcel.length) : ${controllerData.infoParcel.length}');
+        print(
+            '  print(controllerData.infoParcelDelivering.length) : ${controllerData.infoParcelDelivering.length}');
+        print('  print(controllerData.infoParcelDelivered'
+            ''
+            '.length) : ${controllerData.infoParcelDelivered.length}');
       }
       return 'hes data';
     } else {
@@ -311,7 +480,7 @@ class NetworkService {
         var ret = Data2.fromJson(decodedResponse['data']);
         if (ret.accepted?.length == 0) {
           print(ret);
-          controllerData.bed.add(ret);
+          //controllerData.bed.add(ret);
           // SB071931150LV  12021
           // LB013603058CN  3011
           // LV336687519CN  3011
@@ -374,116 +543,116 @@ class NetworkService {
       }
     }
   }
-
-  @override
-  Future updateInfoAboutParcel() async {
-    var client = http.Client();
-
-    ///loadData (ontrollerData.register)
-    for (int i = 0; i < controllerData.register.length; i++) {
-      final request = await client.post(
-          Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
-          headers: {'17token': '$key', 'Content-Type': 'application/json'},
-
-          ///loadData (ontrollerData.register)
-          body:
-              "[{'number': '${controllerData.register[i].accepted.first.number}', 'carrier': '${controllerData.register[i].accepted.first.carrier.toString()}'}]");
-      if (request.statusCode == 200) {
-        var decodedResponse =
-            jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
-        print(decodedResponse);
-        var ret = Data2.fromJson(decodedResponse['data']);
-        print('cool');
-        if (ret.accepted?.length == 0) {
-          print('0000000000000000000');
-        } else {
-          if (ret.accepted?.first?.track?.firstCarrierEvent?.length != 0 ||
-              ret.accepted?.first?.track?.secondCarrierEvent?.length != 0) {
-            ///loadData (ontrollerData.infoParcel)
-            if (controllerData.infoParcel.length ==
-                controllerData.register.length) {
-              ///loadData (ontrollerData.infoParcel)
-              for (int i = 0; i < controllerData.infoParcel.length; i++) {
-                print(1111);
-                print(controllerData.infoParcel[i].accepted.first.number);
-                print(ret.accepted?.first?.number);
-                print('ok');
-
-                ///loadData (ontrollerData.infoParcel)
-                if (controllerData.infoParcel[i].accepted.first.number ==
-                    ret.accepted?.first?.number) {
-                  print(controllerData.infoParcel.length);
-
-                  ///remove (ontrollerData.infoParcel)
-                  controllerData.infoParcel.removeAt(i);
-                  print(controllerData.infoParcel.length);
-
-                  ///add (ontrollerData.infoParcel)
-                  controllerData.infoParcel.add(ret);
-                  print(controllerData.infoParcel.length);
-                  print('обновили');
-                  break;
-                }
-              }
-            } else {
-              ///loadData (ontrollerData.infoParcel)
-              for (int i = 0; i < controllerData.infoParcel.length; i++) {
-                print(1111);
-                print(controllerData.infoParcel[i].accepted.first.number);
-                print(ret.accepted?.first?.number);
-                print('ok');
-
-                ///loadData (ontrollerData.infoParcel)
-                if (controllerData.infoParcel[i].accepted.first.number ==
-                    ret.accepted?.first?.number) {
-                  print(controllerData.infoParcel.length);
-
-                  ///remove (ontrollerData.infoParcel)
-                  controllerData.infoParcel.removeAt(i);
-                  print(controllerData.infoParcel.length);
-
-                  ///add (ontrollerData.infoParcel)
-                  controllerData.infoParcel.add(ret);
-                  print(controllerData.infoParcel.length);
-                  print('обновили');
-                  break;
-                }
-              }
-
-              ///loadData (ontrollerData.bed)
-              for (int i = 0; i < controllerData.bed.length; i++) {
-                print(controllerData.bed[i].rejected.first.number);
-                print(ret.accepted?.first?.number);
-                print('ok');
-
-                ///loadData (ontrollerData.bed)
-                if (controllerData.bed[i].rejected.first.number ==
-                    ret.accepted?.first?.number) {
-                  print(controllerData.infoParcel.length);
-
-                  /// add (ontrollerData.infoParcel)
-                  controllerData.infoParcel.add(ret);
-
-                  /// remove (ontrollerData.bed)
-                  controllerData.bed.removeAt(i);
-                  print(controllerData.infoParcel.length);
-                  print(controllerData.bed.length);
-                  print('oбновили');
-                  break;
-                }
-              }
-            }
-          }
-        }
-        print(ret);
-      } else {
-        print(request.statusCode);
-        print(request.body);
-        throw ServerException();
-      }
-    }
-    Get.snackbar('Tracker Parcel', 'Обновили');
-  }
+  //
+  // @override
+  // Future updateInfoAboutParcel() async {
+  //   var client = http.Client();
+  //
+  //   ///loadData (ontrollerData.register)
+  //   for (int i = 0; i < controllerData.register.length; i++) {
+  //     final request = await client.post(
+  //         Uri.parse('https://api.17track.net/track/v1/gettrackinfo'),
+  //         headers: {'17token': '$key', 'Content-Type': 'application/json'},
+  //
+  //         ///loadData (ontrollerData.register)
+  //         body:
+  //             "[{'number': '${controllerData.register[i].accepted.first.number}', 'carrier': '${controllerData.register[i].accepted.first.carrier.toString()}'}]");
+  //     if (request.statusCode == 200) {
+  //       var decodedResponse =
+  //           jsonDecode(utf8.decode(request.bodyBytes)) as Map<String, dynamic>;
+  //       print(decodedResponse);
+  //       var ret = Data2.fromJson(decodedResponse['data']);
+  //       print('cool');
+  //       if (ret.accepted?.length == 0) {
+  //         print('0000000000000000000');
+  //       } else {
+  //         if (ret.accepted?.first?.track?.firstCarrierEvent?.length != 0 ||
+  //             ret.accepted?.first?.track?.secondCarrierEvent?.length != 0) {
+  //           ///loadData (ontrollerData.infoParcel)
+  //           if (controllerData.infoParcel.length ==
+  //               controllerData.register.length) {
+  //             ///loadData (ontrollerData.infoParcel)
+  //             for (int i = 0; i < controllerData.infoParcel.length; i++) {
+  //               print(1111);
+  //               print(controllerData.infoParcel[i].accepted.first.number);
+  //               print(ret.accepted?.first?.number);
+  //               print('ok');
+  //
+  //               ///loadData (ontrollerData.infoParcel)
+  //               if (controllerData.infoParcel[i].accepted.first.number ==
+  //                   ret.accepted?.first?.number) {
+  //                 print(controllerData.infoParcel.length);
+  //
+  //                 ///remove (ontrollerData.infoParcel)
+  //                 controllerData.infoParcel.removeAt(i);
+  //                 print(controllerData.infoParcel.length);
+  //
+  //                 ///add (ontrollerData.infoParcel)
+  //                 controllerData.infoParcel.add(ret);
+  //                 print(controllerData.infoParcel.length);
+  //                 print('обновили');
+  //                 break;
+  //               }
+  //             }
+  //           } else {
+  //             ///loadData (ontrollerData.infoParcel)
+  //             for (int i = 0; i < controllerData.infoParcel.length; i++) {
+  //               print(1111);
+  //               print(controllerData.infoParcel[i].accepted.first.number);
+  //               print(ret.accepted?.first?.number);
+  //               print('ok');
+  //
+  //               ///loadData (ontrollerData.infoParcel)
+  //               if (controllerData.infoParcel[i].accepted.first.number ==
+  //                   ret.accepted?.first?.number) {
+  //                 print(controllerData.infoParcel.length);
+  //
+  //                 ///remove (ontrollerData.infoParcel)
+  //                 controllerData.infoParcel.removeAt(i);
+  //                 print(controllerData.infoParcel.length);
+  //
+  //                 ///add (ontrollerData.infoParcel)
+  //                 controllerData.infoParcel.add(ret);
+  //                 print(controllerData.infoParcel.length);
+  //                 print('обновили');
+  //                 break;
+  //               }
+  //             }
+  //
+  //             ///loadData (ontrollerData.bed)
+  //             for (int i = 0; i < controllerData.bed.length; i++) {
+  //               print(controllerData.bed[i].rejected.first.number);
+  //               print(ret.accepted?.first?.number);
+  //               print('ok');
+  //
+  //               ///loadData (ontrollerData.bed)
+  //               if (controllerData.bed[i].rejected.first.number ==
+  //                   ret.accepted?.first?.number) {
+  //                 print(controllerData.infoParcel.length);
+  //
+  //                 /// add (ontrollerData.infoParcel)
+  //                 controllerData.infoParcel.add(ret);
+  //
+  //                 /// remove (ontrollerData.bed)
+  //                 controllerData.bed.removeAt(i);
+  //                 print(controllerData.infoParcel.length);
+  //                 print(controllerData.bed.length);
+  //                 print('oбновили');
+  //                 break;
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //       print(ret);
+  //     } else {
+  //       print(request.statusCode);
+  //       print(request.body);
+  //       throw ServerException();
+  //     }
+  //   }
+  //   Get.snackbar('Tracker Parcel', 'Обновили');
+  // }
 
   @override
   Future<int> carrierIdentify(String number) async {

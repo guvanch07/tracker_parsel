@@ -94,6 +94,8 @@ class _ParselScreenState extends State<ParselScreen> {
       time = '${DateTime.now().hour}:${DateTime.now().minute}';
       setState(() {
         controllerData.infoParcel.length;
+        controllerData.infoParcelDelivered.length;
+        controllerData.infoParcelDelivering.length;
       });
     } catch (e) {
       print('i try');
@@ -200,8 +202,6 @@ class _ParselScreenState extends State<ParselScreen> {
               selectedValue == 'Все посылки'
                   ? SizedBox(
                       height: 450,
-                      // child: controllerData.infoParcel.isNotEmpty || tr == 1
-                      //     ? Center(child: CircularProgressIndicator())
                       child: RefreshWidget(
                         //triggerMode: RefreshIndicatorTriggerMode.onEdge,
                         onRefresh: _refresh,
@@ -286,8 +286,6 @@ class _ParselScreenState extends State<ParselScreen> {
                   : selectedValue == 'В процессе доставки'
                       ? SizedBox(
                           height: 450,
-                          // child: controllerData.infoParcel.isNotEmpty || tr == 1
-                          //     ? Center(child: CircularProgressIndicator())
                           child: listOfNumbersDelivering.isEmpty
                               ? Text('Empty')
                               : RefreshWidget(
@@ -394,8 +392,6 @@ class _ParselScreenState extends State<ParselScreen> {
                       : selectedValue == 'Доставлено'
                           ? SizedBox(
                               height: 450,
-                              // child: controllerData.infoParcel.isNotEmpty || tr == 1
-                              //     ? Center(child: CircularProgressIndicator())
                               child: listOfNumbersDelivered.isEmpty
                                   ? Text('Empty')
                                   : RefreshWidget(
