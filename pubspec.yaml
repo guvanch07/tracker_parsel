@@ -41,10 +41,10 @@ dependencies:
   firebase_messaging: ^10.0.7
   http: ^0.13.4
   equatable: ^2.0.3
-  purchases_flutter: ^3.9.5
   get: ^4.6.1
   shared_preferences: ^2.0.13
   get_storage: ^2.0.3
+  purchases_flutter: ^3.10.0
 
 
 
