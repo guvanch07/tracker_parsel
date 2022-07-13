@@ -61,11 +61,13 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   //final controller = Get.find<RevenueCatProvider>();
+  //git config --global user.name "AlinaMatsyash"
+  //git config --global user.email "alina.mathyahs@gmail.com"
+  //
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        /
         ChangeNotifierProvider<GoogleSingInPro>(
             create: (_) => GoogleSingInPro()),
         ChangeNotifierProvider<LogicBarCode>(create: (_) => LogicBarCode()),
