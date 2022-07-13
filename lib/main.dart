@@ -65,6 +65,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        /
         ChangeNotifierProvider<GoogleSingInPro>(
             create: (_) => GoogleSingInPro()),
         ChangeNotifierProvider<LogicBarCode>(create: (_) => LogicBarCode()),
