@@ -163,10 +163,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     switch (entitlement) {
       case Entitlement.premium:
         return Column(
-          children: [
-            Icon(Icons.paid),
-            Text('You are on Paind plan'),
-          ],
+          children: [Icon(Icons.paid), Text('You are on Paind plan')],
         );
       case Entitlement.free:
       default:
@@ -180,6 +177,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future fetchOffers() async {
+    //final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
     final offerings = await PurchaseApi.fetchOffers();
 
     if (offerings.isEmpty) {
@@ -202,6 +200,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
               onClickedPackage: (package) async {
                 await PurchaseApi.purchasePackage(package);
                 Navigator.pop(context);
+                // entitlement == Entitlement.premium
+                //     ? Navigator.push(
+                //         context,
+                //         MaterialPageRoute(builder: (context) => TabScreen()),
+                //       )
+                //     : Text('');
               });
         },
       );

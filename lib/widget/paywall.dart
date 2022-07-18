@@ -23,6 +23,7 @@ class _PaywallState extends State<Paywall> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.75,
       ),
@@ -60,7 +61,7 @@ class _PaywallState extends State<Paywall> {
   Widget buildPackage(BuildContext context, Package package) {
     final product = package.product;
     return Card(
-      color: Theme.of(context).accentColor,
+      color: Color(0xffF57300),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

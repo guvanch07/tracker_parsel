@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
+import 'package:tracker_pkg/services/payments/entitlement.dart';
 import 'package:tracker_pkg/services/payments/payment_cat.dart';
 import 'package:tracker_pkg/services/payments/purchse_api.dart';
 import 'package:tracker_pkg/services/payments/revenue_cat_provider.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
+    //final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GoogleSingInPro>(
@@ -89,6 +91,7 @@ class MyApp extends StatelessWidget {
               // )
               ),
 
+          //home: entitlement == Entitlement.free ? PaymentScreen() : TabScreen(),
           home: PaymentScreen(),
 
           ///home: TabScreen(),
