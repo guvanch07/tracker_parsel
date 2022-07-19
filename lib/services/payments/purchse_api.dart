@@ -16,7 +16,7 @@ class PurchaseApi {
   static const _apiKeyIOS = '';
 
   /// add apiKey
-  static const _apiKeyAndroid = '';
+  static const _apiKeyAndroid = 'goog_DOKlkpaFxlVzvOlXkApNUarXhAv';
 
   /// add apiKey
 
@@ -36,6 +36,15 @@ class PurchaseApi {
       return current == null ? [] : [current];
     } on PlatformException catch (e) {
       return [];
+    }
+  }
+
+  static Future<bool> purchasePackage(Package package) async {
+    try {
+      await Purchases.purchasePackage(package);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

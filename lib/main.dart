@@ -1,17 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_pkg/auth/auth_service.dart';
-import 'package:tracker_pkg/payment/profile_payment.dart';
+import 'package:tracker_pkg/services/payments/entitlement.dart';
+import 'package:tracker_pkg/services/payments/payment_cat.dart';
 import 'package:tracker_pkg/services/payments/purchse_api.dart';
+import 'package:tracker_pkg/services/payments/revenue_cat_provider.dart';
 
 import 'auth/auth_google.dart';
 import 'auth/authgoogle.dart';
 import 'auth/wrapper.dart';
+import 'data/datasources/data.dart';
 import 'location/adding_screen.dart';
 import 'auth/registration.dart';
 import 'logic/barcode.dart';
@@ -35,7 +40,8 @@ import 'onboarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await PurchaseApi.init();
+  await PurchaseApi.init();
+  await GetStorage.init('MyStorage');
   await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -55,8 +61,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  //final controller = Get.find<RevenueCatProvider>();
+  //git config --global user.name "AlinaMatsyash"
+  //git config --global user.email "alina.mathyahs@gmail.com"
+  //
   @override
   Widget build(BuildContext context) {
+    //final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GoogleSingInPro>(
@@ -64,17 +75,26 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LogicBarCode>(create: (_) => LogicBarCode()),
         Provider<AuthService>(
           create: (_) => AuthService(),
-        )
+        ),
+        ChangeNotifierProvider<RevenueCatProvider>(
+            create: (_) => RevenueCatProvider()),
       ],
       child: ScreenUtilInit(
-        builder: () => MaterialApp(
+        builder: () => GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+              // //primarySwatch: Colors.blue,
+              // buttonColor: Colors.red,
+              // buttonTheme: ButtonThemeData(
+              //   buttonColor: Colors.red,
+              // )
+              ),
+
+          //home: entitlement == Entitlement.free ? PaymentScreen() : TabScreen(),
           home: PaymentScreen(),
-          //home: TabScreen(),
+
+          ///home: TabScreen(),
         ),
         designSize: const Size(414, 896),
       ),

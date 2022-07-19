@@ -38,10 +38,10 @@ class PaymentButton extends StatelessWidget {
       {required this.borderradius,
       required this.onPressed,
       required this.text1,
-      required this.text2,
+      //required this.text2,
       this.width});
   final String text1;
-  final String text2;
+  //final String text2;
   final VoidCallback onPressed;
   final double borderradius;
   final double? width;
@@ -65,10 +65,10 @@ class PaymentButton extends StatelessWidget {
               style: kText18.copyWith(color: Colors.white),
             ),
             SizedBox(height: 5),
-            Text(
-              text2,
-              style: kText10,
-            )
+            // Text(
+            //   text2,
+            //   style: kText10,
+            // )
           ],
         ),
       ),

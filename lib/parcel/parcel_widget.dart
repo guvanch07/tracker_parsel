@@ -10,10 +10,10 @@ class ParselWidget extends StatelessWidget {
       required this.where})
       : super();
 
-  final String text;
-  final String where;
-  final String time;
-  final String upgrade;
+  final String? text;
+  final String? where;
+  final String? time;
+  final String? upgrade;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ParselWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Text(
-              time,
+              time!,
               style: TextStyle(
                 color: kTextColor,
                 fontSize: 16,
@@ -43,11 +43,11 @@ class ParselWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    text,
+                    text!,
                     style: kText16,
                   ),
                   Text(
-                    where,
+                    where!,
                     style: kText14,
                   ),
                 ]),
@@ -58,7 +58,7 @@ class ParselWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text('Обновлено', style: kText14),
-                Text(upgrade, style: kText14)
+                Text(upgrade!, style: kText14)
               ],
             ),
           )
